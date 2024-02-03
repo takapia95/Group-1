@@ -1,5 +1,5 @@
-export default function Hero() {
-    return (
+export default function Hero({ loggedIn, user }) {
+    return !loggedIn ? (
         <div className="relative isolate overflow-hidden bg-amber-50">
             <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
                 <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
@@ -35,5 +35,24 @@ export default function Hero() {
                 </div>
             </div>
         </div>
-    )
+    ) : (
+        <div className="relative isolate overflow-hidden bg-amber-50">
+            <div className="text-center py-12 md:py-40">
+                <p className="text-amber-500 text-xl">Hi, {user.name}</p>
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
+                    Where have you been?
+                </h2>
+                <div className="flex justify-center mt-6">
+                    <input
+                        type="text"
+                        className="w-3/4 md:w-1/2 lg:w-1/3 px-4 py-2 text-gray-900 bg-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-amber-500"
+                        placeholder="Places to go, things to do..."
+                    />
+                    <button className="ml-2 px-4 py-2 text-white bg-amber-500 rounded-md shadow-md hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
 }

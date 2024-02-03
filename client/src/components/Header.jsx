@@ -1,4 +1,4 @@
-export default function Header() {
+export default function Header({ user, onLogin }) {
     return (
         <header className="items-center shadow-md">
             <nav className="mx-auto flex items-center justify-evenly p-3 lg:px-8" aria-label="Global">
@@ -10,7 +10,11 @@ export default function Header() {
                     </a>
                 </div>
                 <div>
-                    <button className="bg-amber-500 text-white px-6 py-1 rounded-md shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500">Login</button>
+                    {user ? (
+                        <button className="bg-amber-500 text-white px-6 py-1 rounded-md shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500">View Journals</button>
+                    ) : (
+                        <button onClick={onLogin} className="bg-amber-500 text-white px-6 py-1 rounded-md shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500">Login</button>
+                    )}
                 </div>
             </nav>
         </header>
