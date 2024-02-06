@@ -1,3 +1,3 @@
 # Group-1
-## Origin
+## Voyage
 by - Shreya kola, Maria mills, Ai tran
