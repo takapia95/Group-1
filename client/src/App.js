@@ -4,6 +4,8 @@ import axios from 'axios';
 import './App.css';
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import Showcase from "./components/Showcase";
+import Footer from "./components/Footer";
 
 function App() {
     const [user, setUser] = useState(null);
@@ -32,6 +34,8 @@ function App() {
         <div className="App">
             <Header user={user} onLogin={login} />
             <Hero loggedIn={loggedIn} user={user} />
+            <Showcase />
+            <Footer />
         </div>
     );
 }
