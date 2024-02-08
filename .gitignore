@@ -131,3 +131,6 @@ dist
 
 # intelij
 .idea
+
+# env
+.env

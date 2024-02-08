@@ -4,6 +4,8 @@ import axios from 'axios';
 export const useStore = create((set) => ({
     user: null,
     loggedIn: false,
+    searchResults: [],
+
     // Login
     login: async (username) => {
         try {
@@ -18,4 +20,15 @@ export const useStore = create((set) => ({
         }
     },
     logout: () => set({ user: null, loggedIn: false }),
+
+    search: async (searchQuery) => {
+        try {
+            const response = await axios.get(`http://localhost:3001/search?searchQuery=${searchQuery}`);
+            console.log('Search successful:', response.data );
+            set({ searchResults: response.data.data });
+        } catch (error) {
+            console.error('Search failed:', error);
+            alert('Search failed');
+        }
+    }
 }));
