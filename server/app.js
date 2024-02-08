@@ -3,14 +3,14 @@ const app = express();
 const cors = require('cors'); // Cross-Origin Resource Sharing
 const port = 3001;
 
-// Enable CORS for all requests bc we're using a different port for the client
+// Enable CORS for all requests bc we're requesting from a different origin
 app.use(cors());
 
 app.use(express.json());
 
-// Mock authenticated
+// Mock authenticated - this would be a db
 const users = {
-    'maria': { name: 'maria' } // User: Maria
+    'maria': { name: 'maria' } // User: maria
 };
 
 app.get('/', (req, res) => {

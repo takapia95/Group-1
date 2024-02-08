@@ -1,4 +1,9 @@
-export default function Hero({ loggedIn, user }) {
+import {useStore} from "../resources/store"
+
+const Hero = () => {
+    const loggedIn = useStore((state) => state.loggedIn)
+    const user = useStore((state) => state.user)
+
     return !loggedIn ? (
         <div className="relative isolate overflow-hidden bg-amber-50">
             <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
@@ -56,3 +61,4 @@ export default function Hero({ loggedIn, user }) {
         </div>
     );
 }
+export default Hero;
