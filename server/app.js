@@ -2,8 +2,13 @@ const cors = require('cors'); // Cross-Origin Resource Sharing
 const axios = require('axios');
 const express = require('express');
 const app = express();
+const connectDB = require('./config/db');
 const port = 3001;
 require('dotenv').config();
+
+// Connect to the database
+connectDB()
+
 
 // Middleware:
 // Enable CORS for all requests bc we're requesting from a different origin
