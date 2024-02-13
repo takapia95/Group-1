@@ -17,7 +17,7 @@ export const useStore = create((set) => ({
                     user: response.data.user,
                     loggedIn: true
                 });
-                console.log(`Login successful! Name: ${response.data.username}, loggedIn: ${response.data.loggedIn}`);
+                console.log(`Login successful! Name: ${response.data.user.username}, loggedIn: ${response.data.loggedIn}`);
             }
         } catch (error) {
             console.error('Login failed:', error);

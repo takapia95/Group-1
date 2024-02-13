@@ -77,7 +77,7 @@ const Hero = () => {
                         <div className="flex flex-wrap justify-center gap-4 mt-4">
                             {searchResults.map((result) => (
                                 <div key={result.location_id} className="w-1/3 md:w-1/4 lg:w-1/6">
-                                    <p className="mt-2 text-sm font-semibold text-gray-900">{result.name}</p>
+                                    <p className="mt-2 text-sm font-semibold text-gray-900">{result.user.username}</p>
                                 </div>
                             ))}
                         </div>
