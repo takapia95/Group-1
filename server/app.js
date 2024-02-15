@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 const port = 3001;
 require('dotenv').config();
 
-// Connect to the database
+// Connect to the database when the server starts
 connectDB()
 
 // Middleware:

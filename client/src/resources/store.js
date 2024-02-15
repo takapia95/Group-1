@@ -27,6 +27,18 @@ export const useStore = create((set) => ({
 
     logout: () => set({ user: null, loggedIn: false }),
 
+    // Register
+    register: async (username, password) => {
+        try {
+            const response = await axios.post('http://localhost:3001/register', { username, password });
+            console.log('Registration successful:', response.data);
+            alert('Registration successful');
+        } catch (error) {
+            console.error('Registration failed:', error);
+            alert('Registration failed');
+        }
+    },
+
     search: async (searchQuery) => {
         // get the auth token from the store
         const authToken = useStore.getState().authToken;

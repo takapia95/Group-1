@@ -5,7 +5,7 @@ const dbName = process.env.MONGODB_DB;
 
 let dbInstance;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+// Create a MongoClient instance
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -24,8 +24,11 @@ async function connectDB() {
         process.exit(1);
     }
 }
+
+// return the db instance so we can use it in other files
 const getDb = () => dbInstance;
 
+// this is the example from the docs - still here for reference
 // async function connectDB() {
 //     try {
 //         // Connect the client to the server	(optional starting in v4.7)
