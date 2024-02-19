@@ -1,8 +1,8 @@
 import {useStore} from "../resources/store"
 import {useEffect} from "react";
-import Registration from "./Registration";
 
 const Hero = () => {
+    // zustand store
     const loggedIn = useStore((state) => state.loggedIn)
     const user = useStore((state) => state.user)
     const search = useStore((state) => state.search);
@@ -54,9 +54,6 @@ const Hero = () => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="max-w-sm mx-auto">
-                <Registration/>
             </div>
         </div>
     ) : (

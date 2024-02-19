@@ -26,7 +26,7 @@ const authenticateToken = (req, res, next) => {
             // verify the token using the secret key
             const verified = jwt.verify(token, process.env.TOKEN_SECRET);
             req.user = verified; // Add user info to request
-            next(); // Proceed to the next middleware or route handler
+            next(); // Proceed to the next middleware or route handler, in this case the route handler bc no other middleware
         } catch (error) {
             res.status(403).json({ message: 'Invalid token' });
         }
@@ -59,6 +59,7 @@ app.post('/login', async (req, res) => {
         if (user && await bcrypt.compare(password, user.password)) {
             // Create and assign a token to the user that is valid for 1 hour
             const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+            // Send the token and user info back to the client in the header and body
             res.header('auth-token', token).json({ token, user: { username: user.username }, loggedIn: true });
         } else {
             res.status(400).json({ message: 'Invalid username or password' });

@@ -6,6 +6,7 @@ export const useStore = create((set) => ({
     loggedIn: false,
     authToken: null,
     searchResults: [],
+    modalContent: null,
 
     // Login
     login: async (username, password) => {
@@ -18,10 +19,14 @@ export const useStore = create((set) => ({
                     loggedIn: true
                 });
                 console.log(`Login successful! Name: ${response.data.user.username}, loggedIn: ${response.data.loggedIn}`);
+            } else {
+                // if the login failed, throw an error
+                throw new Error('Login failed');
             }
         } catch (error) {
+            // if there's an error, throw it
             console.error('Login failed:', error);
-            alert('Login failed');
+            throw error;
         }
     },
 
@@ -35,7 +40,7 @@ export const useStore = create((set) => ({
             alert('Registration successful');
         } catch (error) {
             console.error('Registration failed:', error);
-            alert('Registration failed');
+            throw error;
         }
     },
 
@@ -57,5 +62,10 @@ export const useStore = create((set) => ({
             console.error('Search failed:', error);
             alert('Search failed');
         }
+    },
+
+    setModalContent(content) {
+        set({ modalContent: content });
+        //console.log('Modal content:', content); // debugging
     }
 }));
