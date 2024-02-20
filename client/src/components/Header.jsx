@@ -1,4 +1,6 @@
 import {useStore} from "../resources/store";
+import logo from "./media/logo.png";
+
 
 export default function Header() {
     const login = useStore((state) => state.login);
@@ -12,7 +14,8 @@ export default function Header() {
                     <a href="/#" className="flex flex-row-reverse gap-1 items-center">
                         <span className="">Voyage</span>
                         <img className="h-8 w-auto"
-                             src="https://tailwindui.com/img/logos/mark.svg?color=amber&shade=500" alt=""/>
+                            src= {logo} alt=""/>
+
                     </a>
                 </div>
                 <div>
