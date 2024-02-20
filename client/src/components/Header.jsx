@@ -1,6 +1,9 @@
 import {useStore} from "../resources/store";
 import {useEffect, useState} from "react";
 import Modal from "./Modal";
+import logo from "../images/logo.png";
+
+
 export default function Header() {
     // local state
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,7 +29,7 @@ export default function Header() {
                         <a href="/#" className="flex flex-row-reverse gap-1 items-center">
                             <span className="">Voyage</span>
                             <img className="h-8 w-auto"
-                                 src="https://tailwindui.com/img/logos/mark.svg?color=amber&shade=500" alt=""/>
+                                  src= {logo} alt="Voyage"/>
                         </a>
                     </div>
                     <div>
