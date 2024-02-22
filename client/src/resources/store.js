@@ -14,11 +14,12 @@ export const useStore = create((set) => ({
             const response = await axios.post('http://localhost:3001/login', { username, password });
             if (response.data.loggedIn) {
                 set({
-                    authToken: response.data['auth-token'],
+                    authToken: response.data.token,
                     user: response.data.user,
                     loggedIn: true
                 });
-                console.log(`Login successful! Name: ${response.data.user.username}, loggedIn: ${response.data.loggedIn}`);
+                console.log(`Login successful! Name: ${response.data.user.username}, loggedIn: ${response.data.loggedIn}, authToken: ${response.data.token}`);
+                console.log(`Response data:`, response.data);
             } else {
                 // if the login failed, throw an error
                 throw new Error('Login failed');
@@ -47,6 +48,11 @@ export const useStore = create((set) => ({
     search: async (searchQuery) => {
         // get the auth token from the store
         const authToken = useStore.getState().authToken;
+
+        if (searchQuery === '') {
+            alert('Please enter a search query');
+            return;
+        }
 
         try {
             const response = await axios.get(`http://localhost:3001/search?searchQuery=${searchQuery}`,{

@@ -18,6 +18,8 @@ app.use(express.urlencoded({ extended: true })); // Optional: For URL-encoded bo
 
 // auth middleware - checks if the user is authenticated using a jwt token
 const authenticateToken = (req, res, next) => {
+    console.log(req.headers.authorization); // debug
+
     // check if the request has an authorization header and if it starts with 'Bearer '
     const authHeader = req.headers.authorization;
     if (authHeader?.startsWith('Bearer ')) {
@@ -31,7 +33,7 @@ const authenticateToken = (req, res, next) => {
             res.status(403).json({ message: 'Invalid token' });
         }
     } else {
-        res.status(401).json({ message: 'No token provided' });
+        res.status(401).json({ message: 'Access denied' });
     }
 };
 
@@ -60,7 +62,7 @@ app.post('/login', async (req, res) => {
             // Create and assign a token to the user that is valid for 1 hour
             const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
             // Send the token and user info back to the client in the header and body
-            res.header('auth-token', token).json({ token, user: { username: user.username }, loggedIn: true });
+            res.json({ token, user: { username: user.username }, loggedIn: true });
         } else {
             res.status(400).json({ message: 'Invalid username or password' });
         }
