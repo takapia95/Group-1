@@ -2,9 +2,9 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 export const useStore = create((set) => ({
-    user: null,
-    loggedIn: false,
-    authToken: null,
+    user: sessionStorage.getItem('user') || null,
+    loggedIn: sessionStorage.getItem('authToken') || false,
+    authToken: sessionStorage.getItem('authToken') || null,
     searchResults: [],
     modalContent: null,
 
@@ -18,6 +18,11 @@ export const useStore = create((set) => ({
                     user: response.data.user,
                     loggedIn: true
                 });
+
+                // store the auth token in session storage
+                sessionStorage.setItem('authToken', response.data.token);
+                sessionStorage.setItem('user', JSON.stringify(response.data.user));
+
                 console.log(`Login successful! Name: ${response.data.user.username}, loggedIn: ${response.data.loggedIn}, authToken: ${response.data.token}`);
                 console.log(`Response data:`, response.data);
             } else {
@@ -75,3 +80,10 @@ export const useStore = create((set) => ({
         //console.log('Modal content:', content); // debugging
     }
 }));
+
+// clear the session storage when the user logs out
+useStore.subscribe((loggedIn) => {
+    if (!loggedIn) {
+        sessionStorage.clear();
+    }
+}, (state) => state.loggedIn);
