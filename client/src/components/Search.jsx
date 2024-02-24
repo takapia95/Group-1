@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 const Search = () => {
     const navigate = useNavigate(); // useNavigation hook - to navigate to different pages
-    const user = useStore((state) => state.user);
+    const user = JSON.parse(sessionStorage.getItem('user')); // parse the user object from session storage
     const search = useStore((state) => state.search);
     const searchResults = useStore((state) => state.searchResults);
 

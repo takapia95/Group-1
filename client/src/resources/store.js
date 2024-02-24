@@ -83,7 +83,5 @@ export const useStore = create((set) => ({
 
 // clear the session storage when the user logs out
 useStore.subscribe((loggedIn) => {
-    if (!loggedIn) {
-        sessionStorage.clear();
-    }
+    sessionStorage.clear();
 }, (state) => state.loggedIn);
