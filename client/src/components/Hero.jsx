@@ -1,5 +1,4 @@
 import {useStore} from "../resources/store"
-import {useEffect} from "react";
 import Search from "./Search";
 
 const Hero = () => {

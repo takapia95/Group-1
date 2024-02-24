@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import Home from './components/Home';
 import SearchResults from "./components/SearchResults";
+import UserProfile from "./components/UserProfile";
 import reportWebVitals from './reportWebVitals';
 import {
     createBrowserRouter,
@@ -21,6 +22,9 @@ const router = createBrowserRouter([
             },
             {
                 path: "/results", element: <SearchResults />
+            },
+            {
+                path: "/profile", element: < UserProfile />
             }
         ]
     },
