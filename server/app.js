@@ -4,7 +4,7 @@ const express = require('express');
 const authenticateToken = require('./middleware/authMiddleware');
 const app = express();
 const { connectDB } = require('./config/db');
-const { login } = require('./controllers/authController');
+const { login, register } = require('./controllers/authController');
 const port = 3001;
 require('dotenv').config();
 
@@ -21,47 +21,18 @@ app.get('/', (req, res) => {
     res.send('Hello World!');
 });
 
+
 // @desc: Login
 // @route: POST /login
 // @access: Public
-app.post('/login', login)
+app.post('/login', login);
+
 
 // @desc: Register
 // @route: POST /register
 // @access: Public
-app.post('/register', async (req, res) => {
-    const { username, password} = req.body;
+app.post('/register', register);
 
-    if (!username || !password) {
-        return res.status(400).json({ message: 'Username and password are required' });
-    }
-
-    const db = getDb();
-    const userExists = await db.collection('users').findOne({username});
-    if (userExists) {
-        return res.status(400).json({ message: 'User already exists. Please pick a different username.' });
-    }
-
-    // hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // create user
-    const newUser = {
-        username,
-        password: hashedPassword,
-        createdAt: new Date() // timestamp
-    };
-
-    // save user to db
-    try {
-        const result = await db.collection('users').insertOne(newUser);
-        res.status(201).json(result);
-    } catch (error) {
-        console.error('Error saving to the database:', error);
-        res.status(500).json({message: 'Error saving to the database', error});
-    }
-});
 
 // @desc: Search for locations using the TripAdvisor API
 // @route: GET /search

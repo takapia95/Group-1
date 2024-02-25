@@ -47,8 +47,11 @@ export const useStore = create((set) => ({
             console.log('Registration successful:', response.data);
             alert('Registration successful');
         } catch (error) {
-            console.error('Registration failed:', error);
-            throw error;
+            let errMsg = 'Register failed, please try again.'; // default error message
+            if (error?.response.data) {
+                errMsg = error.response.data.message || errMsg;
+            }
+            throw new Error(errMsg);
         }
     },
 
