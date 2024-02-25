@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import axios from 'axios';
+import axios from "axios";
 
 export const useStore = create((set) => ({
-    user: JSON.parse(sessionStorage.getItem('user')) || null,
-    loggedIn: sessionStorage.getItem('authToken') || false,
+    loggedIn: !!sessionStorage.getItem('authToken'),
+    username: JSON.parse(sessionStorage.getItem('username')) || null,
     authToken: sessionStorage.getItem('authToken') || null,
     searchResults: [],
     modalContent: null,
@@ -12,27 +12,26 @@ export const useStore = create((set) => ({
     login: async (username, password) => {
         try {
             const response = await axios.post('http://localhost:3001/login', { username, password });
-            if (response.data.loggedIn) {
+            if (response.data.message === 'Login successful') {
                 set({
                     authToken: response.data.token,
-                    user: response.data.user,
+                    username: response.data.username,
                     loggedIn: true,
                 });
 
                 // store the auth token in session storage
+                sessionStorage.setItem('username', JSON.stringify(response.data.username));
                 sessionStorage.setItem('authToken', response.data.token);
-                sessionStorage.setItem('user', JSON.stringify(response.data.user));
 
-                console.log(`Login successful! Name: ${response.data.user.username}, loggedIn: ${response.data.loggedIn}, authToken: ${response.data.token}`);
+                console.log(`Login successful! Name: ${response.data.username}, loggedIn: ${response.data.loggedIn}, authToken: ${response.data.token}`);
                 console.log(`Response data:`, response.data);
-            } else {
-                // if the login failed, throw an error
-                throw new Error('Login failed');
             }
         } catch (error) {
-            // if there's an error, throw it
-            console.error('Login failed:', error);
-            throw error;
+            let errMsg = 'Login failed, please try again.'; // default error message
+            if (error?.response.data) {
+                errMsg = error.response.data.message || errMsg;
+            }
+            throw new Error(errMsg);
         }
     },
 

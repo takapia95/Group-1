@@ -26,7 +26,7 @@ const Login = () => {
             await login(username, password);
             setLoginError('');
         } catch (error) {
-            setLoginError('Login failed. Please try again.');
+            setLoginError(error.message);
         }
     }
 

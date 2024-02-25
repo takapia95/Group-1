@@ -3,9 +3,8 @@ const axios = require('axios');
 const express = require('express');
 const authenticateToken = require('./middleware/authMiddleware');
 const app = express();
-const { connectDB, getDb } = require('./config/db');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const { connectDB } = require('./config/db');
+const { login } = require('./controllers/authController');
 const port = 3001;
 require('dotenv').config();
 
@@ -25,31 +24,7 @@ app.get('/', (req, res) => {
 // @desc: Login
 // @route: POST /login
 // @access: Public
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-        return res.status(400).json({ message: 'Username and password are required' });
-    }
-
-    try {
-        const db = getDb();
-        const user = await db.collection('users').findOne({ username });
-
-        // Check if user exists and password is correct
-        if (user && await bcrypt.compare(password, user.password)) {
-            // Create and assign a token to the user that is valid for 1 hour
-            const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
-            // Send the token and user info back to the client in the header and body
-            res.json({ token, user: { username: user.username }, loggedIn: true });
-        } else {
-            res.status(400).json({ message: 'Invalid username or password' });
-        }
-    } catch (error) {
-        console.error('Error creating token:', error);
-        res.status(500).json({ message: 'Error creating token', error });
-    }
-});
+app.post('/login', login)
 
 // @desc: Register
 // @route: POST /register
