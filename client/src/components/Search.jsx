@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 const Search = () => {
     const navigate = useNavigate(); // useNavigation hook - to navigate to different pages
-    const user = useStore((state) => state.user); // get the user from the store
+    const username = useStore((state) => state.username); // get the user from the store
     const search = useStore((state) => state.search);
     const searchResults = useStore((state) => state.searchResults);
 
@@ -25,7 +25,7 @@ const Search = () => {
     return (
         <div className="relative isolate overflow-hidden bg-amber-50">
             <div className="text-center py-12 md:py-40">
-                <p className="text-amber-500 text-xl">Hi, {user ? user.username : "there"}!</p>
+                <p className="text-amber-500 text-xl">Hi, {username ? username : "there"}!</p>
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">
                     Where have you been?
                 </h2>
