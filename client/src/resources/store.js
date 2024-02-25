@@ -16,7 +16,7 @@ export const useStore = create((set) => ({
                 set({
                     authToken: response.data.token,
                     user: response.data.user,
-                    loggedIn: true
+                    loggedIn: true,
                 });
 
                 // store the auth token in session storage
@@ -36,7 +36,10 @@ export const useStore = create((set) => ({
         }
     },
 
-    logout: () => set({ user: null, loggedIn: false }),
+    logout: () => {
+        set({ user: null, loggedIn: false, authToken: null, journalEntries: [] });
+        sessionStorage.clear();
+    },
 
     // Register
     register: async (username, password) => {
@@ -78,10 +81,5 @@ export const useStore = create((set) => ({
     setModalContent(content) {
         set({ modalContent: content });
         //console.log('Modal content:', content); // debugging
-    }
+    },
 }));
-
-// clear the session storage when the user logs out
-useStore.subscribe((loggedIn) => {
-    sessionStorage.clear();
-}, (state) => state.loggedIn);
