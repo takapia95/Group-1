@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import axios from 'axios';
 
 export const useStore = create((set) => ({
-    user: sessionStorage.getItem('user') || null,
+    user: JSON.parse(sessionStorage.getItem('user')) || null,
     loggedIn: sessionStorage.getItem('authToken') || false,
     authToken: sessionStorage.getItem('authToken') || null,
     searchResults: [],
