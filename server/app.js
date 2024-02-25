@@ -1,6 +1,7 @@
 const cors = require('cors'); // Cross-Origin Resource Sharing
 const axios = require('axios');
 const express = require('express');
+const authenticateToken = require('./middleware/authMiddleware');
 const app = express();
 const { connectDB, getDb } = require('./config/db');
 const jwt = require('jsonwebtoken');
@@ -15,28 +16,6 @@ connectDB()
 app.use(cors());
 app.use(express.json()); // For JSON bodies
 app.use(express.urlencoded({ extended: true })); // Optional: For URL-encoded bodies - for Postman testing
-
-// auth middleware - checks if the user is authenticated using a jwt token
-const authenticateToken = (req, res, next) => {
-    console.log(req.headers.authorization); // debug
-
-    // check if the request has an authorization header and if it starts with 'Bearer '
-    const authHeader = req.headers.authorization;
-    if (authHeader?.startsWith('Bearer ')) {
-        const token = authHeader.split(' ')[1];
-        try {
-            // verify the token using the secret key
-            const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-            req.user = verified; // Add user info to request
-            next(); // Proceed to the next middleware or route handler, in this case the route handler bc no other middleware
-        } catch (error) {
-            res.status(403).json({ message: 'Invalid token' });
-        }
-    } else {
-        res.status(401).json({ message: 'Access denied' });
-    }
-};
-
 
 // TODO: display frontend? or just remove this route
 app.get('/', (req, res) => {
@@ -150,12 +129,15 @@ app.get('/journals', authenticateToken, async (req, res) => {
 // @desc: Add a new journal
 // @route: POST /journals
 // @access: Private
-app.post('/journals', async (req, res) => {
+app.post('/journals', authenticateToken, async (req, res) => {
     if(!req.body.title || !req.body.text) {
         return res.status(400).json({ message: 'Title AND Text is required' });
     }
 
+    const userId = req.user._id; // Extracted from decoded JWT token
+
     const journalEntry = {
+        userId, // add the user id to the journal entry - associate the journal entry with the user
         title: req.body.title,
         text: req.body.text,
         createdAt: new Date() // timestamp
