@@ -5,6 +5,8 @@ const authenticateToken = require('./middleware/authMiddleware');
 const app = express();
 const { connectDB } = require('./config/db');
 const { login, register } = require('./controllers/authController');
+const { search } = require('./controllers/searchController');
+const {getJournals, addNewJournalEntry} = require("./controllers/journalController");
 const port = 3001;
 require('dotenv').config();
 
@@ -38,67 +40,18 @@ app.post('/register', register);
 // @route: GET /search
 // @access: Private
 // authenticateToken = middleware that checks if the user is authenticated before proceeding to the route handler (this makes the route private)
-app.get('/search', authenticateToken, async (req, res) => {
-    const { searchQuery } = req.query;
-    const url = `https://api.content.tripadvisor.com/api/v1/location/search?key=${process.env.TRIPADVISOR_API_KEY}&searchQuery=${searchQuery}&language=en`;
-
-    try {
-        const response = await axios.get(url);
-        res.json(response.data); // send the data back to the client - the response from the TripAdvisor API
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching data", error: error.response });
-    }
-});
+app.get('/search', authenticateToken, search);
 
 
 // @desc: Get user journals
 // @route: GET /journals
 // @access: Private
-app.get('/journals', authenticateToken, async (req, res) => {
-    try {
-        const db = getDb();
-        // get user id
-        const userId = req.user._id;
-        // this was testing, leaving it here for reference
-        // fetch all journals from the database .find({}) finds all documents in the collection and .toArray() converts the cursor (a cursor is a pointer to the result set of a query) to an array
-        //const journals = await db.collection('journals').find({}).toArray();
-
-        // fetch all journals from the database that belong to the user
-        const journals = await db.collection('journals').find({ userId }).toArray();
-        res.json(journals);
-    } catch (error) {
-        console.error('Error fetching journals:', error);
-        res.status(500).json({ message: 'Error fetching journals', error });
-    }
-});
+app.get('/journals', authenticateToken, getJournals);
 
 // @desc: Add a new journal
 // @route: POST /journals
 // @access: Private
-app.post('/journals', authenticateToken, async (req, res) => {
-    if(!req.body.title || !req.body.text) {
-        return res.status(400).json({ message: 'Title AND Text is required' });
-    }
-
-    const userId = req.user._id; // Extracted from decoded JWT token
-
-    const journalEntry = {
-        userId, // add the user id to the journal entry - associate the journal entry with the user
-        title: req.body.title,
-        text: req.body.text,
-        createdAt: new Date() // timestamp
-    };
-
-    // Save the journal entry to the database
-    try {
-        const db = getDb();
-        const result = await db.collection('journals').insertOne(journalEntry);
-        res.status(201).json(result);
-    } catch (error) {
-        console.error('Error saving to the database:', error);
-        res.status(500).json({message: 'Error saving to the database', error});
-    }
-});
+app.post('/journals', authenticateToken, addNewJournalEntry);
 
 
 // @desc: Update a journal
