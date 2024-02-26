@@ -31,7 +31,7 @@ const Register = () => {
             await register(username, password);
             setRegisterError('');
         } catch (error) {
-            setRegisterError('Register failed. Please try again.');
+            setRegisterError(error.message);
         }
     }
 
