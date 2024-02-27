@@ -1,9 +1,9 @@
 import { PhotoIcon } from '@heroicons/react/24/solid'
 import {useStore} from "../resources/store";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 const Form = () => {
-    const [error, setError] = useState('');
+    const [formError, setError] = useState('');
     const addJournalEntry = useStore((state) => state.addJournalEntry);
 
     const handleSubmit = async (e) => {
@@ -16,8 +16,8 @@ const Form = () => {
         try {
             await addJournalEntry(title, text);
         } catch (error) {
-            setError('Failed to add journal entry');
-            console.error('Failed to add journal entry:', error);
+            setError(error.message);
+            console.log(error)
         }
     };
 
@@ -32,7 +32,7 @@ const Form = () => {
 
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                         <div className="sm:col-span-4">
-                            <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
                                 Title
                             </label>
                             <div className="mt-2">

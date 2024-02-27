@@ -23,8 +23,9 @@ export const useStore = create((set) => ({
                 // store the auth token in session storage
                 sessionStorage.setItem('username', JSON.stringify(response.data.username));
                 sessionStorage.setItem('authToken', response.data.token);
+                sessionStorage.setItem('journalEntries', JSON.stringify(response.data.journals));
 
-                console.log(`Login successful! Name: ${response.data.username}, loggedIn: ${response.data.loggedIn}, authToken: ${response.data.token}`);
+                console.log(`Login successful! Name: ${response.data.username}, authToken: ${response.data.token}, journals: ${JSON.stringify(response.data.journals)}`);
                 console.log(`Response data:`, response.data);
             }
         } catch (error) {

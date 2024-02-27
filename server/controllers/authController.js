@@ -19,7 +19,11 @@ const login = async (req, res) => {
 
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
 
-    res.json({ token, username: user.username, message: 'Login successful' });
+    // check if user has journals
+    const journals = await db.collection('journals').find({ userId: user._id.toString() }).toArray();
+
+
+    res.json({ token, username: user.username, message: 'Login successful', journals});
 };
 
 const register = async (req, res) => {
