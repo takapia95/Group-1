@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Modal from '../components/Modal';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { useStore } from '../resources/store';
 
 // mock the Zustand store
