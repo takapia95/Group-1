@@ -1,4 +1,8 @@
+import {useNavigate} from "react-router-dom";
+
 const Table = ({entries}) => {
+    const navigate = useNavigate();
+
     return (
         <div className="px-4 sm:px-6 lg:px-8 py-8 sm:py-14">
             <div className="sm:flex sm:items-center">
@@ -10,6 +14,7 @@ const Table = ({entries}) => {
                 </div>
                 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                     <button
+                        onClick={() => navigate("/add-entry")}
                         type="button"
                         className="block rounded-md bg-amber-500 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
                     >

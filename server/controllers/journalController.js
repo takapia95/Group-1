@@ -26,6 +26,7 @@ const addNewJournalEntry = async (req, res) => {
 
     const journalEntry = {
         userId, // add the user id to the journal entry - associate the journal entry with the user
+        date: new Date().toLocaleDateString(),
         title: req.body.title,
         text: req.body.text,
         createdAt: new Date() // timestamp
