@@ -77,5 +77,5 @@ Coming soon
 
 - Maria Mills
 - Shreya Kola
-- Ai Train
+- Ai Tran
 

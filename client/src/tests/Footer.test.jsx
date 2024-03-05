@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
 import Footer from '../components/Footer';
+import { render, screen } from '@testing-library/react';
 
 describe('Footer Component', () => {
     it('renders all navigation links', () => {
