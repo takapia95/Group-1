@@ -1,8 +1,8 @@
 import React from 'react';
 import Form from '../components/Form';
-import {act, render, screen, waitFor} from '@testing-library/react';
-import { useStore } from '../resources/store';
+import {act, render, screen} from '@testing-library/react';
 import userEvent from "@testing-library/user-event";
+import { BrowserRouter as Router } from "react-router-dom";
 
 // mock the axios
 jest.mock('axios');
@@ -17,7 +17,11 @@ jest.mock('../resources/store', () => ({
 
 describe('Form Component', () => {
     it('renders all form fields', () => {
-        render(<Form />);
+        render(
+            <Router>
+                <Form />
+            </Router>
+        );
 
         // Find all form fields
         const titleField = screen.getByLabelText(/Title/i);
@@ -35,13 +39,21 @@ describe('Form Component', () => {
     });
 
     it('renders submit button', () => {
-        render(<Form />);
+        render(
+            <Router>
+                <Form />
+            </Router>
+        );
         const submitButton = screen.getByRole('button', { name: /save/i });
         expect(submitButton).toBeInTheDocument();
     });
 
     it('upon form submission, the form data is sent to the server', async () => {
-        render(<Form />);
+        render(
+            <Router>
+                <Form />
+            </Router>
+        );
 
         // wrap the interactions in act because we are using async/await
         await act(async () => {
