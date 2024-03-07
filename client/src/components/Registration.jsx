@@ -30,6 +30,9 @@ const Register = () => {
         try {
             await register(username, password);
             setRegisterError('');
+
+            // Clear the form
+            document.getElementById('register-form').reset();
         } catch (error) {
             setRegisterError(error.message);
         }
@@ -38,7 +41,7 @@ const Register = () => {
     return (
         <div>
             <h4 className="block text-2xl font-bold my-3 border-b-2 w-11/12">Register</h4>
-            <form>
+            <form id="register-form">
                 <div className="mb-6">
                     <label className="block text-sm font-semibold text-gray-700">Username</label>
                     <input
