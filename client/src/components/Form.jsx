@@ -1,10 +1,12 @@
 import { PhotoIcon } from '@heroicons/react/24/solid'
 import {useStore} from "../resources/store";
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 const Form = () => {
     const [formError, setError] = useState('');
     const addJournalEntry = useStore((state) => state.addJournalEntry);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -15,6 +17,12 @@ const Form = () => {
 
         try {
             await addJournalEntry(title, text);
+
+            // Clear the form
+            document.getElementById('form').reset();
+            // redirect to the journal page
+            navigate('/profile');
+
         } catch (error) {
             setError(error.message);
             console.log(error)
