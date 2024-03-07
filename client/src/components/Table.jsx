@@ -1,7 +1,14 @@
 import {useNavigate} from "react-router-dom";
+import {useStore} from "../resources/store";
 
 const Table = ({entries}) => {
     const navigate = useNavigate();
+    const deleteJournalEntry = useStore((state) => state.deleteJournalEntry);
+
+    const handleDelete = (id) => {
+        console.log('Delete button clicked', id)
+        deleteJournalEntry(id);
+    }
 
     return (
         <div className="px-4 sm:px-6 lg:px-8 py-8 sm:py-14">
@@ -58,9 +65,14 @@ const Table = ({entries}) => {
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.location}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.description}</td>
                                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                            <button href="#" className="text-amber-500 hover:text-amber-600">
-                                                Edit<span className="sr-only">, {entry.name}</span>
-                                            </button>
+                                            <div className="space-x-2.5">
+                                                <button href="#" className="text-amber-500 hover:text-amber-600">
+                                                    Edit<span className="sr-only">, {entry.name}</span>
+                                                </button>
+                                                <button onClick={() => handleDelete(entry._id)} href="#" className="text-white bg-amber-500 hover:bg-amber-400 p-1.5 rounded-md">
+                                                    Delete<span className="sr-only">, {entry.name}</span>
+                                                </button>
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

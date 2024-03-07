@@ -130,5 +130,24 @@ export const useStore = create((set) => ({
         } catch (error) {
             console.error('Failed to add journal entry:', error);
         }
+    },
+
+    // delete journal entry
+    deleteJournalEntry: async(id) => {
+        const authToken = useStore.getState().authToken;
+        try {
+            const response = await axios.delete(`http://localhost:3001/journals/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            console.log('Deleted journal entry:', response.data);
+
+            // update the journal entries in the store
+            useStore.getState().getJournalEntries();
+        } catch (error) {
+            console.error('Failed to delete journal entry:', error);
+        }
     }
 }));

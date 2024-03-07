@@ -6,7 +6,7 @@ const app = express();
 const { connectDB } = require('./config/db');
 const { login, register } = require('./controllers/authController');
 const { search } = require('./controllers/searchController');
-const {getJournals, addNewJournalEntry} = require("./controllers/journalController");
+const {getJournals, addNewJournalEntry, deleteJournalEntry} = require("./controllers/journalController");
 const port = 3001;
 require('dotenv').config();
 
@@ -82,9 +82,7 @@ app.put('/journals/:id', async (req, res) => {
 // @desc: Delete a journal
 // @route: DELETE /journals/:id
 // @access: Private
-app.delete('/journals/:id', (req, res) => {
-    res.send('Delete a journal');
-})
+app.delete('/journals/:id', authenticateToken, deleteJournalEntry)
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

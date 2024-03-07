@@ -1,4 +1,5 @@
 const { getDb } = require('../config/db');
+const {ObjectId} = require("mongodb");
 
 const getJournals = async (req, res) => {
     try {
@@ -43,7 +44,42 @@ const addNewJournalEntry = async (req, res) => {
     }
 }
 
+const deleteJournalEntry = async (req, res) => {
+    // get the journal id from the request
+    const journalId = req.params.id;
+    // get user id - extracted from the token
+    const userId = req.user._id;
+
+    console.log('Journal ID:', journalId);
+    console.log('User ID:', userId);
+
+
+    // if the journal id is not provided
+    if (!journalId) {
+        return res.status(400).json({ message: 'Journal ID is required' });
+    }
+
+
+    try {
+        const db = getDb();
+        const result = await db.collection('journals').deleteOne({_id: new ObjectId(journalId), userId: userId});
+        console.log('Deleted journal entry:', result);
+        console.log('Journal ID:', journalId);
+
+        // if the nothing is deleted or the journal entry does not belong to the user
+        if(result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Journal entry not found or does not belong to the user' });
+        }
+
+        res.status(200).json(result);
+    } catch (error) {
+        console.error('Error deleting from the database:', error);
+        res.status(500).json({ message: 'Error deleting from the database', error });
+    }
+}
+
 module.exports = {
     getJournals,
     addNewJournalEntry,
+    deleteJournalEntry,
 }
