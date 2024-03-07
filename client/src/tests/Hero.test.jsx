@@ -9,6 +9,7 @@ jest.mock('axios');
 // mock the Zustand store
 jest.mock('../resources/store', () => ({
     useStore: jest.fn(),
+    loggedIn: false,
 }));
 
 // mock useNavigate
@@ -36,5 +37,11 @@ describe('Hero Component', () => {
         expect(button).toBeInTheDocument();
     });
 
-    // render the search component when logged in TODO: HOW??!?!
+    // render the search component when logged in
+    it('renders the search component when logged in', () => {
+        useStore.mockImplementation((state) => state.loggedIn = true);
+        render(<Hero />);
+        const search = screen.getByText('Search');
+        expect(search).toBeInTheDocument();
+    });
 });

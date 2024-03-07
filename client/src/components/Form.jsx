@@ -22,7 +22,7 @@ const Form = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} id="form">
+        <form onSubmit={handleSubmit} id="form" data-testid="form">
             <div className="space-y-12">
                 <div className="border-b border-gray-900/10 pb-12">
                     <h2 className="text-base font-semibold leading-7 text-gray-900">New Journal Entry</h2>
@@ -134,6 +134,7 @@ const Form = () => {
                     Cancel
                 </button>
                 <button
+                    data-testid="submit"
                     type="submit"
                     className="rounded-md bg-amber-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
                 >
