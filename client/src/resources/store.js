@@ -5,7 +5,7 @@ export const useStore = create((set) => ({
     loggedIn: !!sessionStorage.getItem('authToken'),
     username: JSON.parse(sessionStorage.getItem('username')) || null,
     authToken: sessionStorage.getItem('authToken') || null,
-    searchResults: sessionStorage.getItem('searchResults') ? JSON.parse(sessionStorage.getItem('searchResults')) : [],
+    //searchResults: sessionStorage.getItem('searchResults') ? JSON.parse(sessionStorage.getItem('searchResults')) : [],
     modalContent: null,
     journalEntries: sessionStorage.getItem('journalEntries') ? JSON.parse(sessionStorage.getItem('journalEntries')) : [],
 
@@ -57,7 +57,7 @@ export const useStore = create((set) => ({
         }
     },
 
-    search: async (searchQuery) => {
+    search: async (searchQuery, category = '') => {
         // get the auth token from the store
         const authToken = useStore.getState().authToken;
 
@@ -66,7 +66,14 @@ export const useStore = create((set) => ({
         }
 
         try {
-            const response = await axios.get(`http://localhost:3001/search?searchQuery=${searchQuery}`,{
+            let url = `http://localhost:3001/search?searchQuery=${encodeURIComponent(searchQuery)}`;
+            if (category) {
+                url += `&category=${encodeURIComponent(category)}`;
+            }
+
+            console.log('Search URL:', url);
+
+            const response = await axios.get(url,{
                 // include the auth token in the request headers
                 headers: {
                     'Authorization': `Bearer ${authToken}`
@@ -77,7 +84,9 @@ export const useStore = create((set) => ({
             set({ searchResults: response.data.data });
 
             // store in session storage
-            sessionStorage.setItem('searchResults', JSON.stringify(response.data.data));
+            //sessionStorage.setItem('searchResults', JSON.stringify(response.data.data));
+
+            return response.data.data; // return the search results instead of setting it in the store
         } catch (error) {
             console.error('Search failed:', error);
             throw new Error(error);

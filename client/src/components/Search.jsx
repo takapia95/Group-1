@@ -1,20 +1,9 @@
 import {useStore} from "../resources/store";
-import {useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
 const Search = () => {
     const navigate = useNavigate(); // useNavigation hook - to navigate to different pages
     const username = useStore((state) => state.username); // get the user from the store
-    const search = useStore((state) => state.search);
-    const searchResults = useStore((state) => state.searchResults);
-
-    useEffect(() => {
-        // because it kept logging empty arrays on refresh, which was annoying
-        if (searchResults.length > 0) {
-            console.log("searchResults", searchResults); //debug TODO: remove
-        }
-
-    }, [searchResults]); // when searchResults changes... do something
 
     const handleSearch = (searchQuery) => {
         // added trim because it was possible to search with just spaces, which caused errors...
@@ -22,9 +11,8 @@ const Search = () => {
             alert('Please enter a search query');
             return;
         }
-        search(searchQuery).then(() => {
-            navigate('/results');
-        });
+        // navigate to the search results page with the search query
+        navigate('/results?searchQuery=' + encodeURIComponent(searchQuery));
     }
 
     return (

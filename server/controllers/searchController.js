@@ -1,8 +1,12 @@
 const axios = require("axios");
 
 const search = async(req, res) => {
-    const { searchQuery } = req.query;
-    const url = `https://api.content.tripadvisor.com/api/v1/location/search?key=${process.env.TRIPADVISOR_API_KEY}&searchQuery=${searchQuery}&language=en`;
+    const { searchQuery, category } = req.query;
+    let url = `https://api.content.tripadvisor.com/api/v1/location/search?key=${process.env.TRIPADVISOR_API_KEY}&searchQuery=${searchQuery}&language=en`;
+
+    if (category) {
+        url += `&category=${encodeURIComponent(category)}`;
+    }
 
     try {
         const response = await axios.get(url);
