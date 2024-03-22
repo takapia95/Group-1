@@ -12,6 +12,7 @@ const Table = ({entries}) => {
 
     const handleEdit = (id) => {
         console.log('Edit button clicked', id)
+        navigate(`/edit-entry/${id}`);
     }
 
     return (
@@ -46,11 +47,11 @@ const Table = ({entries}) => {
                                     </th>
                                     <th scope="col"
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Title
+                                        Location
                                     </th>
                                     <th scope="col"
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                                        Location
+                                        Title
                                     </th>
                                     <th scope="col"
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
@@ -64,9 +65,9 @@ const Table = ({entries}) => {
                                 <tbody className="divide-y divide-gray-200 bg-white">
                                 {entries.map((entry) => (
                                     <tr key={entry._id}>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.date}</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.title}</td>
+                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.date}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.location}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.title}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.description}</td>
                                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                             <div className="space-x-2.5">

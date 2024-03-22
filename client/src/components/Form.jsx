@@ -1,22 +1,75 @@
 import { PhotoIcon } from '@heroicons/react/24/solid'
 import {useStore} from "../resources/store";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useNavigate, useParams} from "react-router-dom";
 
-const Form = () => {
+const Form = ({ mode }) => {
     const [formError, setError] = useState('');
+    const { entryId } = useParams(); // Get the entryId from the URL
+    const { locationId, locationName } = useParams(); // Get the locationId and locationName from the URL
+    const getJournalEntryById = useStore((state) => state.getJournalEntryById);
     const addJournalEntry = useStore((state) => state.addJournalEntry);
     const navigate = useNavigate();
+    const [entry, setEntry] = useState({});
+
+    // Component did unmount callback function for if the user hits save or not, for form state revival on cancel
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (mode === 'add') {
+                if (!locationId || !locationName) {
+                    // TODO: ...redirect to 404 or something
+                    console.error('No location ID or name provided!');
+                }
+                // If the user is adding a new journal entry, set the locationId and locationName
+                console.log('locationId:', locationId);
+                console.log('locationName:', locationName);
+            }
+
+            if (mode === 'edit') {
+                if (!entryId) {
+                    // TODO: ...redirect to 404 or something
+                    console.error('No journal ID provided!');
+                }
+                // Fetch the entry to edit
+                console.log('entryId:', entryId);
+
+                try {
+                    // Fetch the entry and wait for it to complete
+                    const fetchedEntry = await getJournalEntryById(entryId);
+
+                    // Populate the form with the entry's data
+                    // set the form data
+                    console.log('fetchedEntry:', fetchedEntry)
+                    document.getElementById('title').value = fetchedEntry.title;
+                    document.getElementById('about').value = fetchedEntry.text;
+                    // TODO: whenever other stuff is added to the form, populate them here as well
+                } catch (error) {
+                    setError(error.message);
+                    console.error('Failed to get journal entry:', error);
+                }
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const title = document.getElementById('title').value;
         const text = document.getElementById('about').value;
         const isPublic = document.getElementById('yes').checked; // TODO: use this to set the visibility of the entry
 
         try {
-            await addJournalEntry(title, text);
+            // TODO: add other stuff like photo, visibility, etc.
+            if (mode === 'edit') {
+                // Update the journal entry
+                //await editJournalEntry(entryId, title, text);
+                console.log('Editing journal entry:', entryId, title, text);
+            } else {
+                await addJournalEntry(locationId, locationName, title, text);
+            }
 
             // Clear the form
             document.getElementById('form').reset();
@@ -138,7 +191,7 @@ const Form = () => {
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-                <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+                <button type="button" onClick={() => navigate('/profile')} className="text-sm font-semibold leading-6 text-gray-900">
                     Cancel
                 </button>
                 <button

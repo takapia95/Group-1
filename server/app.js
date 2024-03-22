@@ -6,7 +6,7 @@ const app = express();
 const { connectDB } = require('./config/db');
 const { login, register } = require('./controllers/authController');
 const { search } = require('./controllers/searchController');
-const {getJournals, addNewJournalEntry, deleteJournalEntry} = require("./controllers/journalController");
+const {getJournals, addNewJournalEntry, deleteJournalEntry, getJournalEntryById} = require("./controllers/journalController");
 const port = 3001;
 require('dotenv').config();
 
@@ -52,6 +52,13 @@ app.get('/journals', authenticateToken, getJournals);
 // @route: POST /journals
 // @access: Private
 app.post('/journals', authenticateToken, addNewJournalEntry);
+
+
+// @desc: Get a journal by ID
+// @route: GET /journals/:id
+// @access: Private
+app.get('/journals/:id', authenticateToken, getJournalEntryById);
+
 
 
 // @desc: Update a journal

@@ -6,6 +6,7 @@ export const useStore = create((set) => ({
     username: JSON.parse(sessionStorage.getItem('username')) || null,
     authToken: sessionStorage.getItem('authToken') || null,
     //searchResults: sessionStorage.getItem('searchResults') ? JSON.parse(sessionStorage.getItem('searchResults')) : [],
+    currentLocationInfo: sessionStorage.getItem('currentLocationInfo') ? JSON.parse(sessionStorage.getItem('currentLocationInfo')) : null,
     modalContent: null,
     journalEntries: sessionStorage.getItem('journalEntries') ? JSON.parse(sessionStorage.getItem('journalEntries')) : [],
 
@@ -115,10 +116,10 @@ export const useStore = create((set) => ({
         }
     },
 
-    addJournalEntry: async (title, text) => {
+    addJournalEntry: async (locationId, locationName, title, text) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await axios.post('http://localhost:3001/journals', { title, text }, {
+            const response = await axios.post('http://localhost:3001/journals', { locationId, locationName, title, text }, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -149,5 +150,22 @@ export const useStore = create((set) => ({
         } catch (error) {
             console.error('Failed to delete journal entry:', error);
         }
-    }
+    },
+
+    getJournalEntryById: async (id) => {
+        const authToken = useStore.getState().authToken;
+        try {
+            const response = await axios.get(`http://localhost:3001/journals/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            console.log('Journal entry:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to get journal entry:', error);
+        }
+    },
+
 }));

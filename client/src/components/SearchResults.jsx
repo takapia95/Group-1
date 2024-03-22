@@ -37,6 +37,12 @@ const SearchResults = () => {
         navigate(`/results?${searchParams.toString()}`);
     };
 
+    const handleLocation = (location) => {
+        sessionStorage.setItem('currentLocationInfo', JSON.stringify(location));
+        console.log('locationId:', location.location_id);
+        navigate(`/location/${location.location_id}`);
+    };
+
     useEffect(() => {
         setIsLoading(true);
         const getSearchResults = async () => {
@@ -75,7 +81,7 @@ const SearchResults = () => {
                         <div key={result.location_id}
                              className="bg-amber-100 p-10 hover:scale-110 text-gray-800 max-w-lg transition ease-in-out hover:cursor-pointer rounded-md">
                             {/* TODO: make this a Link? and pass the location_id as a param so that we can use it to write a journal entry on the location */}
-                            <button onClick={() => console.log('clicked', result.location_id)}>
+                            <button onClick={() => handleLocation(result)}>
                                 <h4 className="text-xl font-bold tracking-tight border-b border-amber-500 mb-3">{result.name}</h4>
                                 <p className="max-w-52 tracking-tight">{result.address_obj?.address_string}</p>
                             </button>

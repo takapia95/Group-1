@@ -6,11 +6,13 @@ import Home from './components/Home';
 import SearchResults from "./components/SearchResults";
 import UserProfile from "./components/UserProfile";
 import AddEntry from "./components/AddEntry";
+import EditEntry from "./components/EditEntry";
 import reportWebVitals from './reportWebVitals';
 import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
+import LocationDetail from "./components/LocationDetail";
 
 const router = createBrowserRouter([
     {
@@ -28,7 +30,13 @@ const router = createBrowserRouter([
                 path: "/profile", element: < UserProfile />
             },
             {
-                path: "/add-entry", element: <AddEntry />
+                path: "/add-entry/:locationName/:locationId", element: <AddEntry />
+            },
+            {
+                path: "/edit-entry/:entryId", element: <EditEntry />
+            },
+            {
+                path: "/location/:locationId", element: <LocationDetail />
             }
         ]
     },
