@@ -39,7 +39,7 @@ export const useStore = create((set) => ({
     },
 
     logout: () => {
-        set({ user: null, loggedIn: false, authToken: null, journalEntries: [] });
+        set({ user: null, loggedIn: false, authToken: null, journalEntries: [], searchResults: [], currentLocationInfo: null });
         sessionStorage.clear();
     },
 
