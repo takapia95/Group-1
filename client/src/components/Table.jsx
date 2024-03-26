@@ -26,7 +26,7 @@ const Table = ({entries}) => {
                 </div>
                 <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
                     <button
-                        onClick={() => navigate("/add-entry")}
+                        onClick={() => navigate("/#")}
                         type="button"
                         className="block rounded-md bg-amber-500 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
                     >
@@ -68,7 +68,7 @@ const Table = ({entries}) => {
                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.date}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.location}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.title}</td>
-                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.description}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.text.slice(0, 15) + "..."}</td>
                                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                             <div className="space-x-2.5">
                                                 <button onClick={() => handleEdit(entry._id)} href="#" className="text-amber-500 hover:text-amber-600">
