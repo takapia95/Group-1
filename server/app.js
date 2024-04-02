@@ -6,7 +6,7 @@ const app = express();
 const { connectDB } = require('./config/db');
 const { login, register } = require('./controllers/authController');
 const { search } = require('./controllers/searchController');
-const {getJournals, addNewJournalEntry, deleteJournalEntry, getJournalEntryById} = require("./controllers/journalController");
+const {getJournals, addNewJournalEntry, deleteJournalEntry, getJournalEntryById, editJournalEntry, getJournalEntriesByLocation} = require("./controllers/journalController");
 const port = 3001;
 require('dotenv').config();
 
@@ -18,9 +18,9 @@ app.use(cors());
 app.use(express.json()); // For JSON bodies
 app.use(express.urlencoded({ extended: true })); // Optional: For URL-encoded bodies - for Postman testing
 
-// TODO: display frontend? or just remove this route
+// TODO: display frontend
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('Hello World');
 });
 
 
@@ -48,6 +48,7 @@ app.get('/search', authenticateToken, search);
 // @access: Private
 app.get('/journals', authenticateToken, getJournals);
 
+
 // @desc: Add a new journal
 // @route: POST /journals
 // @access: Private
@@ -64,32 +65,19 @@ app.get('/journals/:id', authenticateToken, getJournalEntryById);
 // @desc: Update a journal
 // @route: PUT /journals/:id
 // @access: Private
-app.put('/journals/:id', async (req, res) => {
-    if (!req.body.title || !req.body.text) {
-        return res.status(400).json({ message: 'Title AND Text is required' });
-    }
+app.put('/journals/:id', authenticateToken, editJournalEntry);
 
-    const journalEntry = {
-        title: req.body.title,
-        text: req.body.text,
-        lastUpdated: new Date() // timestamp
-    };
-
-    // Update the journal entry in the database
-    try {
-        const db = getDb();
-        const result = await db.collection('journals').updateOne({ _id: req.params.id }, { $set: journalEntry });
-        res.status(200).json(result);
-    } catch (error) {
-        console.log('Error updating the database:', error);
-        res.status(500).json({ message: 'Error updating the database', error });
-    }
-});
 
 // @desc: Delete a journal
 // @route: DELETE /journals/:id
 // @access: Private
 app.delete('/journals/:id', authenticateToken, deleteJournalEntry)
+
+
+// @desc: Get journal entries by location
+// @route: GET /journals/location/:id
+// @access: Private
+app.get('/journals/location/:id', authenticateToken, getJournalEntriesByLocation);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

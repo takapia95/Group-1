@@ -57,6 +57,10 @@ const Table = ({entries}) => {
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                         Description
                                     </th>
+                                    <th scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                        Visibility
+                                    </th>
                                     <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-6">
                                         <span className="sr-only">Edit</span>
                                     </th>
@@ -69,6 +73,7 @@ const Table = ({entries}) => {
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.location}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.title}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.text.slice(0, 15) + "..."}</td>
+                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.isPublic ? 'Public' : 'Private'}</td>
                                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                             <div className="space-x-2.5">
                                                 <button onClick={() => handleEdit(entry._id)} href="#" className="text-amber-500 hover:text-amber-600">

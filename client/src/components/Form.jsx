@@ -1,49 +1,41 @@
-import { PhotoIcon } from '@heroicons/react/24/solid'
-import {useStore} from "../resources/store";
-import {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
+import { PhotoIcon } from '@heroicons/react/24/solid';
+import { useStore } from '../resources/store';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Form = ({ mode }) => {
     const [formError, setError] = useState('');
-    const { entryId } = useParams(); // Get the entryId from the URL
-    const { locationId, locationName } = useParams(); // Get the locationId and locationName from the URL
-    const getJournalEntryById = useStore((state) => state.getJournalEntryById);
-    const addJournalEntry = useStore((state) => state.addJournalEntry);
     const navigate = useNavigate();
-    const [entry, setEntry] = useState({});
-
-    // Component did unmount callback function for if the user hits save or not, for form state revival on cancel
+    const { entryId, locationId, locationName } = useParams();
+    const { getJournalEntryById, addJournalEntry, editJournalEntry } = useStore((state) => ({
+        getJournalEntryById: state.getJournalEntryById,
+        addJournalEntry: state.addJournalEntry,
+        editJournalEntry: state.editJournalEntry,
+    }));
 
     useEffect(() => {
         const fetchData = async () => {
             if (mode === 'add') {
                 if (!locationId || !locationName) {
-                    // TODO: ...redirect to 404 or something
                     console.error('No location ID or name provided!');
+                    // TODO: Redirect to 404 or something
                 }
-                // If the user is adding a new journal entry, set the locationId and locationName
-                console.log('locationId:', locationId);
-                console.log('locationName:', locationName);
             }
 
             if (mode === 'edit') {
                 if (!entryId) {
-                    // TODO: ...redirect to 404 or something
                     console.error('No journal ID provided!');
+                    // TODO: Redirect to 404 or something
                 }
-                // Fetch the entry to edit
-                console.log('entryId:', entryId);
 
                 try {
-                    // Fetch the entry and wait for it to complete
-                    const fetchedEntry = await getJournalEntryById(entryId);
-
-                    // Populate the form with the entry's data
-                    // set the form data
-                    console.log('fetchedEntry:', fetchedEntry)
-                    document.getElementById('title').value = fetchedEntry.title;
-                    document.getElementById('about').value = fetchedEntry.text;
-                    // TODO: whenever other stuff is added to the form, populate them here as well
+                    const formState = JSON.parse(sessionStorage.getItem('formState'));
+                    if (formState && formState.id === entryId) {
+                        populateFormFields(formState);
+                    } else {
+                        const fetchedEntry = await getJournalEntryById(entryId);
+                        populateFormFields(fetchedEntry);
+                    }
                 } catch (error) {
                     setError(error.message);
                     console.error('Failed to get journal entry:', error);
@@ -51,36 +43,60 @@ const Form = ({ mode }) => {
             }
         };
 
-        fetchData();
-    }, []);
+        const saveFormState = () => {
+            const formState = {
+                id: entryId,
+                title: document.getElementById('title').value,
+                about: document.getElementById('about').value,
+                isPublic: document.querySelector('input[name="visibility"]').checked,
+            };
+            sessionStorage.setItem('formState', JSON.stringify(formState));
+        };
 
+        document.getElementById('form').addEventListener('input', saveFormState);
+
+        fetchData();
+
+    }, [mode, entryId, locationId, locationName, getJournalEntryById]);
+
+    const populateFormFields = (data) => {
+        document.getElementById('title').value = data.title;
+        document.getElementById('about').value = data.text || data.about;
+        document.getElementById(data.isPublic ? 'yes' : 'no').checked = true;
+        // TODO: Photos?
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const title = document.getElementById('title').value;
         const text = document.getElementById('about').value;
-        const isPublic = document.getElementById('yes').checked; // TODO: use this to set the visibility of the entry
+        const isPublic = document.getElementById('yes').checked;
 
         try {
-            // TODO: add other stuff like photo, visibility, etc.
             if (mode === 'edit') {
-                // Update the journal entry
-                //await editJournalEntry(entryId, title, text);
-                console.log('Editing journal entry:', entryId, title, text);
+                await editJournalEntry(entryId, title, text, isPublic);
             } else {
-                await addJournalEntry(locationId, locationName, title, text);
+                await addJournalEntry(locationId, locationName, title, text, isPublic);
             }
 
-            // Clear the form
-            document.getElementById('form').reset();
-            // redirect to the journal page
+            resetForm();
             navigate('/profile');
-
         } catch (error) {
             setError(error.message);
-            console.log(error)
+            console.log(error);
         }
     };
+
+    const handleCancel = () => {
+        resetForm();
+        navigate('/profile');
+        sessionStorage.removeItem('formState');
+    };
+
+    const resetForm = () => {
+        document.getElementById('form').reset();
+    };
+
 
     return (
         <form onSubmit={handleSubmit} id="form" data-testid="form">
@@ -164,7 +180,7 @@ const Form = ({ mode }) => {
                                 <div className="flex items-center gap-x-3">
                                     <input
                                         id="yes"
-                                        name="accessible"
+                                        name="visibility"
                                         type="radio"
                                         className="h-4 w-4 border-gray-300 text-amber-500 focus:ring-amber-500"
                                         defaultChecked
@@ -176,7 +192,7 @@ const Form = ({ mode }) => {
                                 <div className="flex items-center gap-x-3">
                                     <input
                                         id="no"
-                                        name="accessible"
+                                        name="visibility"
                                         type="radio"
                                         className="h-4 w-4 border-gray-300 text-amber-500 focus:ring-amber-500"
                                     />
@@ -191,7 +207,7 @@ const Form = ({ mode }) => {
             </div>
 
             <div className="mt-6 flex items-center justify-end gap-x-6">
-                <button type="button" onClick={() => navigate('/profile')} className="text-sm font-semibold leading-6 text-gray-900">
+                <button type="button" onClick={() => handleCancel()} className="text-sm font-semibold leading-6 text-gray-900">
                     Cancel
                 </button>
                 <button

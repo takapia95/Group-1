@@ -4,6 +4,7 @@ import {
 } from '@heroicons/react/20/solid'
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import Loading from "./Loading";
 
 const filters = [
     {
@@ -74,7 +75,7 @@ const SearchResults = () => {
                     </button>
                 ))}
             </div>
-            {isLoading && <p>Loading...</p>}
+            {isLoading && <Loading/>}
             {searchResults.length > 0 ? (
                 <div className="flex flex-wrap gap-3.5 justify-center py-8">
                     {searchResults.map((result, index) => (

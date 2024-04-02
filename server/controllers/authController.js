@@ -17,7 +17,7 @@ const login = async (req, res) => {
         return res.status(400).json({ message: 'Invalid username or password' });
     }
 
-    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h'});
 
     // check if user has journals
     const journals = await db.collection('journals').find({ userId: user._id.toString() }).toArray();

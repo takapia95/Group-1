@@ -1,6 +1,52 @@
 import { create } from 'zustand';
 import axios from "axios";
 
+// Function to debounce another function
+// It returns a new function that, when called, will delay execution of the original function
+// until after wait milliseconds have elapsed since the last time it was called.
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
+// Handling session expiration with a debounced alert and redirect
+const handleSessionExpired = debounce(() => {
+    alert('Your session has expired. Please log in again.'); // Notify user
+    window.location = '/'; // Redirect to login
+}, 100); // Debounce time of 100ms, will only execute once every 100ms
+
+const apiClient = axios.create({
+    baseURL: 'http://localhost:3001'
+});
+
+// Response interceptor to handle expired tokens with debounced redirection
+apiClient.interceptors.response.use(response => response, error => {
+    if (error.response && error.response.status === 403) {
+        // If we have a 403 response, handle it here
+        useStore.setState({
+            loggedIn: false,
+            username: null,
+            authToken: null,
+            journalEntries: [],
+            searchResults: [],
+            currentLocationInfo: null
+        });
+        sessionStorage.clear(); // Clear session storage
+
+        handleSessionExpired(); // Debounced alert and redirect
+
+        return Promise.reject(error);
+    }
+    return Promise.reject(error);
+});
+
 export const useStore = create((set) => ({
     loggedIn: !!sessionStorage.getItem('authToken'),
     username: JSON.parse(sessionStorage.getItem('username')) || null,
@@ -9,11 +55,14 @@ export const useStore = create((set) => ({
     currentLocationInfo: sessionStorage.getItem('currentLocationInfo') ? JSON.parse(sessionStorage.getItem('currentLocationInfo')) : null,
     modalContent: null,
     journalEntries: sessionStorage.getItem('journalEntries') ? JSON.parse(sessionStorage.getItem('journalEntries')) : [],
+    formState: sessionStorage.getItem('formState') ? JSON.parse(sessionStorage.getItem('formState')) : {},
+
+
 
     // Login
     login: async (username, password) => {
         try {
-            const response = await axios.post('http://localhost:3001/login', { username, password });
+            const response = await apiClient.post('http://localhost:3001/login', { username, password });
             if (response.data.message === 'Login successful') {
                 set({
                     authToken: response.data.token,
@@ -46,7 +95,7 @@ export const useStore = create((set) => ({
     // Register
     register: async (username, password) => {
         try {
-            const response = await axios.post('http://localhost:3001/register', { username, password });
+            const response = await apiClient.post('http://localhost:3001/register', { username, password });
             console.log('Registration successful:', response.data);
             alert('Registration successful');
         } catch (error) {
@@ -74,7 +123,7 @@ export const useStore = create((set) => ({
 
             console.log('Search URL:', url);
 
-            const response = await axios.get(url,{
+            const response = await apiClient.get(url,{
                 // include the auth token in the request headers
                 headers: {
                     'Authorization': `Bearer ${authToken}`
@@ -101,7 +150,7 @@ export const useStore = create((set) => ({
     getJournalEntries: async () => {
         const token = useStore.getState().authToken;
         try {
-            const response = await axios.get('http://localhost:3001/journals', {
+            const response = await apiClient.get('http://localhost:3001/journals', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -116,10 +165,10 @@ export const useStore = create((set) => ({
         }
     },
 
-    addJournalEntry: async (locationId, locationName, title, text) => {
+    addJournalEntry: async (locationId, locationName, title, text, isPublic) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await axios.post('http://localhost:3001/journals', { locationId, locationName, title, text }, {
+            const response = await apiClient.post('http://localhost:3001/journals', { locationId, locationName, title, text, isPublic }, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -127,7 +176,7 @@ export const useStore = create((set) => ({
             console.log('Added journal entry:', response.data);
 
             // update the journal entries in the store
-            useStore.getState().getJournalEntries();
+            await useStore.getState().getJournalEntries();
         } catch (error) {
             console.error('Failed to add journal entry:', error);
         }
@@ -137,7 +186,7 @@ export const useStore = create((set) => ({
     deleteJournalEntry: async(id) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await axios.delete(`http://localhost:3001/journals/${id}`, {
+            const response = await apiClient.delete(`http://localhost:3001/journals/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -146,7 +195,7 @@ export const useStore = create((set) => ({
             console.log('Deleted journal entry:', response.data);
 
             // update the journal entries in the store
-            useStore.getState().getJournalEntries();
+            await useStore.getState().getJournalEntries();
         } catch (error) {
             console.error('Failed to delete journal entry:', error);
         }
@@ -155,7 +204,7 @@ export const useStore = create((set) => ({
     getJournalEntryById: async (id) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await axios.get(`http://localhost:3001/journals/${id}`, {
+            const response = await apiClient.get(`http://localhost:3001/journals/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -165,6 +214,40 @@ export const useStore = create((set) => ({
             return response.data;
         } catch (error) {
             console.error('Failed to get journal entry:', error);
+        }
+    },
+
+    editJournalEntry: async (id, title, text, isPublic) => {
+        const authToken = useStore.getState().authToken;
+        try {
+            const response = await apiClient.put(`http://localhost:3001/journals/${id}`, { title, text, isPublic }, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            console.log('Edited journal entry:', response.data);
+
+            // update the journal entries in the store
+            await useStore.getState().getJournalEntries();
+        } catch (error) {
+            console.error('Failed to edit journal entry:', error);
+        }
+    },
+
+    getJournalEntriesByLocation: async (locationId) => {
+        const authToken = useStore.getState().authToken;
+        try {
+            const response = await apiClient.get(`http://localhost:3001/journals/location/${locationId}`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+
+            console.log('Journal entries by location:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to get journal entries by location:', error);
         }
     },
 

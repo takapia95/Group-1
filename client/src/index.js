@@ -7,18 +7,20 @@ import SearchResults from "./components/SearchResults";
 import UserProfile from "./components/UserProfile";
 import AddEntry from "./components/AddEntry";
 import EditEntry from "./components/EditEntry";
+import LocationDetail from "./components/LocationDetail";
+import Error from "./components/Error";
 import reportWebVitals from './reportWebVitals';
 import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import LocationDetail from "./components/LocationDetail";
+
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
-        errorElement: <div>404 Not Found</div>,
+        errorElement: <Error />,
         children: [
             {
                 index: true, element: <> <Home /> </>
