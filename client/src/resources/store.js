@@ -98,6 +98,9 @@ export const useStore = create((set) => ({
             const response = await apiClient.post('http://localhost:3001/register', { username, password });
             console.log('Registration successful:', response.data);
             alert('Registration successful');
+
+            // After successful registration, switch to the login form
+            set({ modalContent: 'login' }); // Update modalContent to 'login'
         } catch (error) {
             let errMsg = 'Register failed, please try again.'; // default error message
             if (error?.response.data) {
@@ -106,6 +109,7 @@ export const useStore = create((set) => ({
             throw new Error(errMsg);
         }
     },
+
 
     search: async (searchQuery, category = '') => {
         // get the auth token from the store
