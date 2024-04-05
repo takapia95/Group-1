@@ -1,4 +1,3 @@
-import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import logo from "../images/logo.png";
 
 export default function Error() {
@@ -8,7 +7,7 @@ export default function Error() {
                 <img
                     className="mx-auto h-10 w-auto sm:h-12"
                     src={logo}
-                    alt="Your Company"
+                    alt="Voyage"
                 />
                 <div className="mx-auto mt-20 max-w-2xl text-center sm:mt-24">
                     <p className="text-base font-semibold leading-8 text-amber-500">404</p>
