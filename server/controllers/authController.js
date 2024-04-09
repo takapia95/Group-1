@@ -23,7 +23,7 @@ const login = async (req, res) => {
     const journals = await db.collection('journals').find({ userId: user._id.toString() }).toArray();
 
 
-    res.json({ token, username: user.username, message: 'Login successful', journals});
+    res.status(200).json({ token, username: user.username, message: 'Login successful', journals});
 };
 
 const register = async (req, res) => {
@@ -58,7 +58,7 @@ const register = async (req, res) => {
         res.status(201).json(result);
     } catch (error) {
         console.error('Error saving to the database:', error);
-        res.status(500).json({ message: 'Error saving to the database', error });
+        res.status(400).json({ message: 'Error saving to the database', error });
     }
 }
 
