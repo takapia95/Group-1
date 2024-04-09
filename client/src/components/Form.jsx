@@ -1,10 +1,21 @@
-import { PhotoIcon } from '@heroicons/react/24/solid';
 import { useStore } from '../resources/store';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import travelPhoto1 from '../images/cover-photos/travel-1.jpg';
+import travelPhoto2 from '../images/cover-photos/travel-2.jpg';
+import travelPhoto3 from '../images/cover-photos/travel-3.jpg';
+import travelPhoto4 from '../images/cover-photos/travel-4.jpg';
+
+const photos = [
+    { id: 'travelPhoto1', src: travelPhoto1 },
+    { id: 'travelPhoto2', src: travelPhoto2 },
+    { id: 'travelPhoto3', src: travelPhoto3 },
+    { id: 'travelPhoto4', src: travelPhoto4 },
+];
 
 const Form = ({ mode }) => {
-    const [formError, setError] = useState('');
+    const [formError, setFormError] = useState('');
+    const [selectedPhoto, setSelectedPhoto] = useState(photos[0].id);
     const navigate = useNavigate();
     const { entryId, locationId, locationName } = useParams();
     const { getJournalEntryById, addJournalEntry, editJournalEntry } = useStore((state) => ({
@@ -17,15 +28,17 @@ const Form = ({ mode }) => {
         const fetchData = async () => {
             if (mode === 'add') {
                 if (!locationId || !locationName) {
-                    console.error('No location ID or name provided!');
-                    // TODO: Redirect to 404 or something
+                    setFormError('No location ID or name provided!');
+                    console.log(formError);
+                    navigate('/404');
                 }
             }
 
             if (mode === 'edit') {
                 if (!entryId) {
                     console.error('No journal ID provided!');
-                    // TODO: Redirect to 404 or something
+                    setFormError('No journal ID provided!');
+                    navigate('/404');
                 }
 
                 try {
@@ -37,8 +50,8 @@ const Form = ({ mode }) => {
                         populateFormFields(fetchedEntry);
                     }
                 } catch (error) {
-                    setError(error.message);
-                    console.error('Failed to get journal entry:', error);
+                    setFormError(error.message);
+                    console.log(formError);
                 }
             }
         };
@@ -49,6 +62,7 @@ const Form = ({ mode }) => {
                 title: document.getElementById('title').value,
                 about: document.getElementById('about').value,
                 isPublic: document.querySelector('input[name="visibility"]').checked,
+                coverPhoto: selectedPhoto,
             };
             sessionStorage.setItem('formState', JSON.stringify(formState));
         };
@@ -63,7 +77,7 @@ const Form = ({ mode }) => {
         document.getElementById('title').value = data.title;
         document.getElementById('about').value = data.text || data.about;
         document.getElementById(data.isPublic ? 'yes' : 'no').checked = true;
-        // TODO: Photos?
+        setSelectedPhoto(data.coverPhoto);
     };
 
     const handleSubmit = async (e) => {
@@ -71,18 +85,19 @@ const Form = ({ mode }) => {
         const title = document.getElementById('title').value;
         const text = document.getElementById('about').value;
         const isPublic = document.getElementById('yes').checked;
+        const coverPhoto = selectedPhoto;
 
         try {
             if (mode === 'edit') {
-                await editJournalEntry(entryId, title, text, isPublic);
+                await editJournalEntry(entryId, title, text, isPublic, coverPhoto);
             } else {
-                await addJournalEntry(locationId, locationName, title, text, isPublic);
+                await addJournalEntry(locationId, locationName, title, text, isPublic, coverPhoto);
             }
 
             resetForm();
             navigate('/profile');
         } catch (error) {
-            setError(error.message);
+            setFormError(error.message);
             console.log(error);
         }
     };
@@ -144,28 +159,25 @@ const Form = ({ mode }) => {
                     required
                 />
                             </div>
-                            <p className="mt-3 text-sm leading-6 text-gray-600">What do you want to remember about this trip? Do you want to come back?</p>
+                            <p className="mt-3 text-sm leading-6 text-gray-600">What do you want to remember about this
+                                trip? Do you want to come back?</p>
                         </div>
 
                         <div className="col-span-full">
                             <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
                                 Cover photo
                             </label>
-                            <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                                <div className="text-center">
-                                    <PhotoIcon className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
-                                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                                        <label
-                                            htmlFor="file-upload"
-                                            className="relative cursor-pointer rounded-md bg-white font-semibold text-amber-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-500 focus-within:ring-offset-2 hover:text-amber-400"
-                                        >
-                                            <span>Upload a file</span>
-                                            <input id="file-upload" name="file-upload" type="file" className="sr-only" />
-                                        </label>
-                                        <p className="pl-1">or drag and drop</p>
-                                    </div>
-                                    <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
-                                </div>
+                            <div className="mt-2 flex flex-wrap justify-center gap-4">
+                                {photos.map(photo => (
+                                    <button
+                                        key={photo.id}
+                                        type="button"
+                                        className={`rounded-lg overflow-hidden border-2 ${selectedPhoto === photo.id ? 'border-amber-500' : 'border-transparent'}`}
+                                        onClick={() => setSelectedPhoto(photo.id)}
+                                    >
+                                        <img src={photo.src} alt={`Travel Photo`} className="h-32 w-32 object-cover"/>
+                                    </button>
+                                ))}
                             </div>
                         </div>
                     </div>
@@ -175,7 +187,8 @@ const Form = ({ mode }) => {
                     <div className="mt-1.5 space-y-10">
                         <fieldset>
                             <legend className="text-sm font-semibold leading-6 text-gray-900">Share it</legend>
-                            <p className="mt-1 text-sm leading-6 text-gray-600">Would you like to make this entry public?</p>
+                            <p className="mt-1 text-sm leading-6 text-gray-600">Would you like to make this entry
+                                public?</p>
                             <div className="mt-6 space-y-6">
                                 <div className="flex items-center gap-x-3">
                                     <input

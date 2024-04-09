@@ -12,24 +12,21 @@ const LocationDetail = () => {
     const [randomEntry, setRandomEntry] = useState(null);
 
     useEffect(() => {
-        // Fetch location information as needed or read from session/local storage
         const fetchLocationInfo = async () => {
             setLoading(true);
             try {
                 const storedLocationInfo = JSON.parse(sessionStorage.getItem('currentLocationInfo'));
-                // Simulate fetching and setting state
                 if (storedLocationInfo) {
                     useStore.setState({ currentLocationInfo: storedLocationInfo });
                 } else {
-                    // Fetch from API or handle the absence of data appropriately
                     console.error('No location info found');
-                    navigate('/404'); // Redirect if no information is available
+                    navigate('/404');
                 }
             } catch (error) {
                 console.error('Failed to fetch location info', error);
-                navigate('/error'); // Navigate to an error page or handle error
+                navigate('/error');
             } finally {
-                setLoading(false); // Ensure loading is set to false after operation
+                setLoading(false);
             }
         };
 
@@ -67,7 +64,7 @@ const LocationDetail = () => {
             <p className="mt-6 text-xl leading-8 text-gray-700 font-bold">{location?.name}</p>
             <p className="mt-6 text-lg leading-8 text-gray-700 font-semibold">{location?.address_obj.address_string}</p>
             {/* TODO: add photos of location? */}
-            <img src={location && location.photo ? location.photo : 'https://via.placeholder.com/500'} className="rounded" />
+            <img src={location?.photo ? location.photo : 'https://via.placeholder.com/500'} alt={location?.name} className="rounded" />
             <p>Want to write about your experience?</p>
             <button onClick={() => navigate(`/add-entry/${location?.name}/${locationId}`)}
                     className="rounded-md bg-amber-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500">

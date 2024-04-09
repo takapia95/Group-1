@@ -149,7 +149,6 @@ export const useStore = create((set) => ({
 
     setModalContent(content) {
         set({ modalContent: content });
-        //console.log('Modal content:', content); // debugging
     },
     getJournalEntries: async () => {
         const token = useStore.getState().authToken;
@@ -169,10 +168,10 @@ export const useStore = create((set) => ({
         }
     },
 
-    addJournalEntry: async (locationId, locationName, title, text, isPublic) => {
+    addJournalEntry: async (locationId, locationName, title, text, isPublic, coverPhoto) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await apiClient.post('http://localhost:3001/journals', { locationId, locationName, title, text, isPublic }, {
+            const response = await apiClient.post('http://localhost:3001/journals', { locationId, locationName, title, text, isPublic, coverPhoto }, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -221,10 +220,10 @@ export const useStore = create((set) => ({
         }
     },
 
-    editJournalEntry: async (id, title, text, isPublic) => {
+    editJournalEntry: async (id, title, text, isPublic, coverPhoto) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await apiClient.put(`http://localhost:3001/journals/${id}`, { title, text, isPublic }, {
+            const response = await apiClient.put(`http://localhost:3001/journals/${id}`, { title, text, isPublic, coverPhoto }, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }

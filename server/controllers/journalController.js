@@ -39,6 +39,7 @@ const addNewJournalEntry = async (req, res) => {
         title: req.body.title,
         text: req.body.text,
         isPublic: req.body.isPublic, // visibility
+        coverPhoto: req.body.coverPhoto, // image
         createdAt: new Date() // timestamp
     };
 
@@ -122,6 +123,7 @@ const editJournalEntry = async (req, res) => {
         title: req.body.title,
         text: req.body.text,
         isPublic: req.body.isPublic,
+        coverPhoto: req.body.coverPhoto,
         lastUpdated: new Date() // timestamp
     };
 
