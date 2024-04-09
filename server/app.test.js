@@ -35,4 +35,3 @@ describe('Search', () => {
   });
 });
 
-// Add similar blocks for other routes and middleware tests
