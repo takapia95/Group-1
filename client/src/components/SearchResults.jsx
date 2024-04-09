@@ -37,7 +37,6 @@ const SearchResults = () => {
     };
 
     useEffect(() => {
-        setIsLoading(true);
         const getSearchResults = async () => {
             try {
                 const response = await useStore.getState().search(searchQuery, category);

@@ -1,13 +1,12 @@
 const cors = require('cors'); // Cross-Origin Resource Sharing
-const axios = require('axios');
 const express = require('express');
-const authenticateToken = require('./middleware/authMiddleware');
 const app = express();
+const port = 3001;
+const {authenticateToken, validateObjectId} = require('./middleware/authMiddleware');
 const { connectDB } = require('./config/db');
 const { login, register } = require('./controllers/authController');
 const { search } = require('./controllers/searchController');
 const {getJournals, addNewJournalEntry, deleteJournalEntry, getJournalEntryById, editJournalEntry, getJournalEntriesByLocation} = require("./controllers/journalController");
-const port = 3001;
 require('dotenv').config();
 
 // Connect to the database when the server starts
@@ -17,11 +16,6 @@ connectDB()
 app.use(cors());
 app.use(express.json()); // For JSON bodies
 app.use(express.urlencoded({ extended: true })); // Optional: For URL-encoded bodies - for Postman testing
-
-// TODO: display frontend
-app.get('/', (req, res) => {
-    res.send('Hello World');
-});
 
 
 // @desc: Login
@@ -58,20 +52,20 @@ app.post('/journals', authenticateToken, addNewJournalEntry);
 // @desc: Get a journal by ID
 // @route: GET /journals/:id
 // @access: Private
-app.get('/journals/:id', authenticateToken, getJournalEntryById);
+app.get('/journals/:id', authenticateToken, validateObjectId, getJournalEntryById);
 
 
 
 // @desc: Update a journal
 // @route: PUT /journals/:id
 // @access: Private
-app.put('/journals/:id', authenticateToken, editJournalEntry);
+app.put('/journals/:id', authenticateToken, validateObjectId, editJournalEntry);
 
 
 // @desc: Delete a journal
 // @route: DELETE /journals/:id
 // @access: Private
-app.delete('/journals/:id', authenticateToken, deleteJournalEntry)
+app.delete('/journals/:id', authenticateToken, validateObjectId, deleteJournalEntry)
 
 
 // @desc: Get journal entries by location

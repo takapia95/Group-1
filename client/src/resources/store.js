@@ -22,6 +22,11 @@ const handleSessionExpired = debounce(() => {
     window.location = '/'; // Redirect to login
 }, 100); // Debounce time of 100ms, will only execute once every 100ms
 
+// Handling 404
+const handle404 = debounce(() => {
+    window.location = '/404'; // Redirect to 404
+}, 100);
+
 const apiClient = axios.create({
     baseURL: 'http://localhost:3001'
 });
@@ -41,6 +46,15 @@ apiClient.interceptors.response.use(response => response, error => {
         sessionStorage.clear(); // Clear session storage
 
         handleSessionExpired(); // Debounced alert and redirect
+
+        return Promise.reject(error);
+    }
+
+    // If the error is 404
+    if (error.response && error.response.status === 404) {
+        console.error('404 Error:', error.response.data);
+
+        handle404();
 
         return Promise.reject(error);
     }

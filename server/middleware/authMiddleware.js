@@ -25,4 +25,12 @@ const authenticateToken = (req, res, next) => {
     }
 };
 
-module.exports = authenticateToken;
+function validateObjectId(req, res, next) {
+    const { id } = req.params;
+    if (!id || id.length !== 24) {
+        return res.status(404).json({ message: 'Invalid ID format' });
+    }
+    next();
+}
+
+module.exports = { authenticateToken, validateObjectId };

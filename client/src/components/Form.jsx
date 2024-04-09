@@ -5,6 +5,7 @@ import travelPhoto1 from '../images/cover-photos/travel-1.jpg';
 import travelPhoto2 from '../images/cover-photos/travel-2.jpg';
 import travelPhoto3 from '../images/cover-photos/travel-3.jpg';
 import travelPhoto4 from '../images/cover-photos/travel-4.jpg';
+import Loading from "./Loading";
 
 const photos = [
     { id: 'travelPhoto1', src: travelPhoto1 },
@@ -14,6 +15,7 @@ const photos = [
 ];
 
 const Form = ({ mode }) => {
+    const [loading, setLoading] = useState(true);
     const [formError, setFormError] = useState('');
     const [selectedPhoto, setSelectedPhoto] = useState(photos[0].id);
     const navigate = useNavigate();
@@ -52,6 +54,8 @@ const Form = ({ mode }) => {
                 } catch (error) {
                     setFormError(error.message);
                     console.log(formError);
+                } finally {
+                    setLoading(false);
                 }
             }
         };

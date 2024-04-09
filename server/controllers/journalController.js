@@ -130,8 +130,17 @@ const editJournalEntry = async (req, res) => {
     // Update the journal entry in the database
     try {
         const db = getDb();
-        // Update the journal entry in the database using the journal id
-        const result = await db.collection('journals').updateOne({ _id: new ObjectId(req.params.id) }, { $set: journalEntry });
+
+        // get the journal entry by id ONLY IF it belongs to the user
+        const result = await db.collection('journals').findOne({ _id: new ObjectId(req.params.id), userId: req.user._id });
+
+        // if the journal entry does not exist or does not belong to the user
+        if (!result) {
+            return res.status(404).json({ message: 'Unable to find this journal entry for your account.' });
+        }
+
+        // else we update the journal entry
+        await db.collection('journals').updateOne({ _id: new ObjectId(req.params.id) }, { $set: journalEntry });
         res.status(200).json(result);
     } catch (error) {
         console.log('Error updating the database:', error);
