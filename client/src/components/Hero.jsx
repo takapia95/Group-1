@@ -1,17 +1,9 @@
 import {useStore} from "../resources/store"
 import Search from "./Search";
-import {useState} from "react";
-import Modal from "./Modal";
 
 const Hero = () => {
     // zustand store
     const loggedIn = useStore((state) => state.loggedIn);
-
-    // local state
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    // Function to toggle modal visibility
-    const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     return !loggedIn ? (
         <div className="relative isolate overflow-hidden bg-amber-50">
@@ -26,12 +18,12 @@ const Hero = () => {
                         fugiat veniam occaecat fugiat aliqua.
                     </p>
                     <div className="mt-10 flex items-center gap-x-6">
-                        <button
-                            onClick={toggleModal}
+                        <a
+                            href="/#"
                             className="rounded-md bg-amber-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
                         >
                             Start your journey
-                        </button>
+                        </a>
                     </div>
                 </div>
                 <div
@@ -51,7 +43,6 @@ const Hero = () => {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={isModalOpen} onClose={toggleModal}/>
         </div>
     ) : (
         <Search />

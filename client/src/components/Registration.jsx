@@ -27,13 +27,6 @@ const Register = () => {
             return;
         }
 
-        // password policy regex
-        const passwordPolicy = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$/;
-        if (!password.match(passwordPolicy)) {
-            setRegisterError('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character from #$@!%&*?');
-            return;
-        }
-
         try {
             await register(username, password);
             setRegisterError('');
