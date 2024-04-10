@@ -133,5 +133,5 @@ dist
 .idea
 
 # env
-.env
+server/.env
 server/.env

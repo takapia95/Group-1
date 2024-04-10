@@ -1,26 +1,20 @@
 import {useStore} from "../resources/store";
-import {
-    BuildingOffice2Icon
-} from '@heroicons/react/20/solid'
 import {useEffect, useState} from "react";
 import {useNavigate, useSearchParams} from "react-router-dom";
+import Loading from "./Loading";
 
 const filters = [
     {
         name: 'Hotels',
-        icon: <BuildingOffice2Icon />,
     },
     {
         name: 'Restaurants',
-        icon: <BuildingOffice2Icon />,
     },
     {
         name: 'Attractions',
-        icon: <BuildingOffice2Icon />,
     },
     {
         name: 'Geos',
-        icon: <BuildingOffice2Icon />,
     }
 ]
 
@@ -35,6 +29,12 @@ const SearchResults = () => {
     const handleFilter = (category) => {
         searchParams.set('category', category);
         navigate(`/results?${searchParams.toString()}`);
+    };
+
+    const handleLocation = (location) => {
+        sessionStorage.setItem('currentLocationInfo', JSON.stringify(location));
+        console.log('locationId:', location.location_id);
+        navigate(`/location/${location.location_id}`);
     };
 
     useEffect(() => {
@@ -62,19 +62,21 @@ const SearchResults = () => {
                         onClick={() => handleFilter(filter.name.toLowerCase())}
                         key={filter.name}
                         className="rounded-md bg-amber-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500">
-                        {/*<i className="">{filter.icon}</i>*/}
                         {filter.name}
                     </button>
                 ))}
             </div>
-            {isLoading && <p>Loading...</p>}
+            {isLoading && <Loading />}
             {searchResults.length > 0 ? (
                 <div className="flex flex-wrap gap-3.5 justify-center py-8">
                     {searchResults.map((result, index) => (
                         <div key={result.location_id}
                              className="bg-amber-100 p-10 hover:scale-110 text-gray-800 max-w-lg transition ease-in-out hover:cursor-pointer rounded-md">
-                            <h4 className="text-xl font-bold tracking-tight border-b border-amber-500 mb-3">{result.name}</h4>
-                        <p className="max-w-52 tracking-tight">{result.address_obj?.address_string}</p>
+                            {/* TODO: make this a Link? and pass the location_id as a param so that we can use it to write a journal entry on the location */}
+                            <button onClick={() => handleLocation(result)}>
+                                <h4 className="text-xl font-bold tracking-tight border-b border-amber-500 mb-3">{result.name}</h4>
+                                <p className="max-w-52 tracking-tight">{result.address_obj?.address_string}</p>
+                            </button>
                     </div>
                 ))}
                 </div>
