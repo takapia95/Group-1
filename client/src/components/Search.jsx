@@ -14,7 +14,13 @@ const Search = () => {
         // navigate to the search results page with the search query
         navigate('/results?searchQuery=' + encodeURIComponent(searchQuery));
     }
-
+    
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleSearch(e.target.value);
+        }
+    }
+    
     return (
         <div className="relative isolate overflow-hidden bg-amber-50">
             <div className="text-center py-12 md:py-40">
@@ -30,6 +36,7 @@ const Search = () => {
                         id="search"
                         maxLength={50}
                         required
+                        onKeyPress={handleKeyPress}
                     />
                     <button onClick={() => handleSearch(document.getElementById('search').value)}
                             className="ml-2 px-4 py-2 text-white bg-amber-500 rounded-md shadow-md hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500">
