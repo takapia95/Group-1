@@ -42,6 +42,9 @@ const router = createBrowserRouter([
             },
             {
                 path: "/location/:locationId", element: <LocationDetail />
+            },
+            {
+                path: "/404", element: <Error />
             }
         ]
     },

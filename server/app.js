@@ -5,7 +5,7 @@ const port = 3001;
 const {authenticateToken, validateObjectId} = require('./middleware/authMiddleware');
 const { connectDB } = require('./config/db');
 const { login, register } = require('./controllers/authController');
-const { search } = require('./controllers/searchController');
+const { search, getLocationPhoto } = require('./controllers/searchController');
 const {getJournals, addNewJournalEntry, deleteJournalEntry, getJournalEntryById, editJournalEntry, getJournalEntriesByLocation} = require("./controllers/journalController");
 require('dotenv').config();
 
@@ -72,6 +72,13 @@ app.delete('/journals/:id', authenticateToken, validateObjectId, deleteJournalEn
 // @route: GET /journals/location/:id
 // @access: Private
 app.get('/journals/location/:id', authenticateToken, getJournalEntriesByLocation);
+
+
+// @desc: Get photos for a location
+// @route: GET /locations/:id/photos
+// @access: Private
+app.get('/locations/:id/photos', authenticateToken, getLocationPhoto);
+
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

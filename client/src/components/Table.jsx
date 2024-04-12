@@ -71,7 +71,7 @@ const Table = ({ entries }) => {
                                 </thead>
                                 <tbody className="divide-y divide-gray-200 bg-white">
                                 {entries.map((entry) => (
-                                    <tr key={entry._id}>
+                                    <tr key={entry._id} onClick={() => console.log(entry)} className="cursor-pointer">
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.date}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.location}</td>
                                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{entry.title}</td>

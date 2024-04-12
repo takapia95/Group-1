@@ -17,6 +17,20 @@ const search = async(req, res) => {
 
 }
 
+
+const getLocationPhoto = async(req, res) => {
+    const { id } = req.params;
+    const url = `https://api.content.tripadvisor.com/api/v1/location/${id}/photos?language=en&key=${process.env.TRIPADVISOR_API_KEY}`;
+
+    try {
+        const response = await axios.get(url);
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching data", error: error.response });
+    }
+}
+
 module.exports = {
     search,
+    getLocationPhoto
 }

@@ -268,4 +268,20 @@ export const useStore = create((set) => ({
         }
     },
 
+    getLocationPhoto: async (locationId) => {
+        const authToken = useStore.getState().authToken;
+
+        try {
+            const response = await apiClient.get(`http://localhost:3001/locations/${locationId}/photos`, {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+            console.log('Location photo:', response.data);
+            return response.data;
+        } catch (error) {
+            console.error('Failed to get location photo:', error);
+        }
+    }
+
 }));

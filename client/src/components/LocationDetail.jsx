@@ -5,31 +5,34 @@ import Loading from "./Loading";
 
 const LocationDetail = () => {
     const [loading, setLoading] = useState(true);
+    const [randomEntry, setRandomEntry] = useState(null);
+    const [locationPhoto, setLocationPhoto] = useState(null);
     const { locationId } = useParams();
     const navigate = useNavigate();
     const location = useStore((state) => state.currentLocationInfo);
     const getJournalEntriesByLocation = useStore((state) => state.getJournalEntriesByLocation);
-    const [randomEntry, setRandomEntry] = useState(null);
+    const getLocationPhoto = useStore((state) => state.getLocationPhoto);
 
     useEffect(() => {
-        // Fetch location information as needed or read from session/local storage
         const fetchLocationInfo = async () => {
             setLoading(true);
             try {
                 const storedLocationInfo = JSON.parse(sessionStorage.getItem('currentLocationInfo'));
-                // Simulate fetching and setting state
+                // If location info is in session storage, update the store with it
                 if (storedLocationInfo) {
                     useStore.setState({ currentLocationInfo: storedLocationInfo });
+                    // get location photo
+                    const photoData = await getLocationPhoto(storedLocationInfo.location_id);
+                    setLocationPhoto(photoData.data[0].images.large.url);
                 } else {
-                    // Fetch from API or handle the absence of data appropriately
                     console.error('No location info found');
-                    navigate('/404'); // Redirect if no information is available
+                    navigate('/404'); // Redirect to a 404 page if no location info is found
                 }
             } catch (error) {
                 console.error('Failed to fetch location info', error);
-                navigate('/error'); // Navigate to an error page or handle error
+                navigate('/404');
             } finally {
-                setLoading(false); // Ensure loading is set to false after operation
+                setLoading(false);
             }
         };
 
@@ -48,7 +51,7 @@ const LocationDetail = () => {
 
         fetchLocationInfo();
         fetchRandomEntry();
-    }, [locationId, navigate]);
+    }, [locationId, navigate, locationPhoto]);
 
     useEffect(() => {
         if (!loading && locationId !== location?.location_id) {
@@ -66,8 +69,8 @@ const LocationDetail = () => {
             <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Wow! You've been to...</h2>
             <p className="mt-6 text-xl leading-8 text-gray-700 font-bold">{location?.name}</p>
             <p className="mt-6 text-lg leading-8 text-gray-700 font-semibold">{location?.address_obj.address_string}</p>
-            {/* TODO: add photos of location? */}
-            <img src={location && location.photo ? location.photo : 'https://via.placeholder.com/500'} className="rounded" />
+            {/* TODO: maybe add a better placeholder image? */}
+            <img src={locationPhoto || 'https://via.placeholder.com/500'} className="rounded" alt={location?.name} />
             <p>Want to write about your experience?</p>
             <button onClick={() => navigate(`/add-entry/${location?.name}/${locationId}`)}
                     className="rounded-md bg-amber-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500">
