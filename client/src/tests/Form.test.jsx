@@ -26,14 +26,14 @@ describe('Form Component', () => {
         // Find all form fields
         const titleField = screen.getByLabelText(/Title/i);
         const aboutField = screen.getByLabelText(/About/i);
-        const coverPhotoField = screen.getByLabelText(/Upload a file/i);
+        const coverPhoto = screen.getByText("Cover photo");
         const yesRadio = screen.getByLabelText(/Yes/i);
         const noRadio = screen.getByLabelText(/No/i);
 
         // make sure all form fields are rendered
         expect(titleField).toBeInTheDocument();
         expect(aboutField).toBeInTheDocument();
-        expect(coverPhotoField).toBeInTheDocument();
+        expect(coverPhoto).toBeInTheDocument();
         expect(yesRadio).toBeInTheDocument();
         expect(noRadio).toBeInTheDocument();
     });

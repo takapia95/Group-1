@@ -33,7 +33,7 @@ describe('Hero Component', () => {
         render(<Hero />);
 
         // Find the button
-        const button = screen.getByRole('link', { name: /start your journey/i });
+        const button = screen.getByRole('button', { name: /start your journey/i });
         expect(button).toBeInTheDocument();
     });
 
