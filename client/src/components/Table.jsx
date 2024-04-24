@@ -2,6 +2,18 @@ import React, { useState } from 'react';
 import { Offcanvas } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../resources/store';
+import { CalendarIcon, MapPinIcon } from '@heroicons/react/20/solid'
+import travelPhoto1 from '../images/cover-photos/travel-1.jpg';
+import travelPhoto2 from '../images/cover-photos/travel-2.jpg';
+import travelPhoto3 from '../images/cover-photos/travel-3.jpg';
+import travelPhoto4 from '../images/cover-photos/travel-4.jpg';
+
+const photos = {
+    travelPhoto1: travelPhoto1,
+    travelPhoto2: travelPhoto2,
+    travelPhoto3: travelPhoto3,
+    travelPhoto4: travelPhoto4,
+};
 
 // Define icons for the public and private states
 const EyeIcon = (
@@ -112,13 +124,15 @@ const Table = ({ entries }) => {
             {selectedEntry && (
                 <Offcanvas show={showDetails} onHide={closeDetails}>
                     <Offcanvas.Header closeButton>
-                        <Offcanvas.Title> {selectedEntry.title}</Offcanvas.Title>
+                        <Offcanvas.Title>
+                            <h3>{selectedEntry.title}</h3>
+                        </Offcanvas.Title>
                     </Offcanvas.Header>
                     <Offcanvas.Body>
-                        <p>Date: {selectedEntry.date}</p>
-                        <p>Location: {selectedEntry.location}</p>
-                        <p>Description: {selectedEntry.text}</p>
-                        {/* Add more details as needed */}
+                        <p className="flex gap-1 center items-center font-semibold"><CalendarIcon className="h-5 w-5"/> {selectedEntry.date}</p>
+                        <img src={photos[selectedEntry.coverPhoto]} alt={selectedEntry.coverPhoto} className="pb-3 rounded"/>
+                        <p className="flex gap-1 center items-center font-semibold"><MapPinIcon className="h-5 w-5"/> {selectedEntry.location}</p>
+                        <p className="flex gap-1 center items-center font-semibold">{selectedEntry.text}</p>
                     </Offcanvas.Body>
                 </Offcanvas>
             )}
