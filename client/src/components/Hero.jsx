@@ -2,6 +2,7 @@ import {useStore} from "../resources/store"
 import Search from "./Search";
 import {useState} from "react";
 import Modal from "./Modal";
+import addJournalPhoto from '../images/add-journal.png';
 
 
 const Hero = () => {
@@ -22,9 +23,8 @@ const Hero = () => {
                         Begin your journey with <span className="text-amber-500">Voyage.</span>
                     </h1>
                     <p className="mt-6 text-lg leading-8 text-gray-600">
-                        Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit
-                        sunt amet
-                        fugiat veniam occaecat fugiat aliqua.
+                        Share your experience or read about others! Voyage is all about remembering those moments
+                        and being able to share those moments as well.
                     </p>
                     <div className="mt-10 flex items-center gap-x-6">
                         <button
@@ -40,9 +40,8 @@ const Hero = () => {
                     <div className="max-w-3xl flex-none sm:max-w-5xl lg:max-w-none">
                         <div
                             className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
-                            {/*We'll replace this with a screenshot of how it looks when you want to create a journal entry.*/}
                             <img
-                                src="https://tailwindui.com/img/component-images/project-app-screenshot.png"
+                                src={addJournalPhoto}
                                 alt="App screenshot"
                                 width={2432}
                                 height={1442}
