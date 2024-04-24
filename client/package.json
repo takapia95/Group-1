@@ -19,8 +19,8 @@
     "zustand": "^4.5.0"
   },
   "scripts": {
-    "start": "npx --max-old-space-size=4096 react-scripts start",
-    "build": "npx --max-old-space-size=4096 react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "test:coverage": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject"
