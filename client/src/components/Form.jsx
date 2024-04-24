@@ -179,7 +179,7 @@ const Form = ({ mode }) => {
                                         className={`rounded-lg overflow-hidden border-2 ${selectedPhoto === photo.id ? 'border-amber-500' : 'border-transparent'}`}
                                         onClick={() => setSelectedPhoto(photo.id)}
                                     >
-                                        <img src={photo.src} alt={`Travel Photo`} className="h-32 w-32 object-cover"/>
+                                        <img src={photo.src} alt={`Travel Photo ${photo.id}`} className="h-32 w-32 object-cover"/>
                                     </button>
                                 ))}
                             </div>

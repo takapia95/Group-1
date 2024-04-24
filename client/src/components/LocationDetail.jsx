@@ -51,7 +51,7 @@ const LocationDetail = () => {
 
         fetchLocationInfo();
         fetchRandomEntry();
-    }, [locationId, navigate, locationPhoto]);
+    }, [locationId, navigate, locationPhoto, getJournalEntriesByLocation, getLocationPhoto]);
 
     useEffect(() => {
         if (!loading && locationId !== location?.location_id) {

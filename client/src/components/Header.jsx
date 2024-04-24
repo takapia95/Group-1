@@ -46,7 +46,7 @@ export default function Header() {
             );
         } else {
             buttons = (
-                <a href="/profile" className="bg-amber-500 text-white px-6 py-1 rounded-md shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500">View Journals</a>
+                <a href="/profile" className="bg-amber-500 text-white px-6 py-1 rounded-md shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 no-underline">View Journals</a>
             );
         }
     } else {
@@ -60,7 +60,7 @@ export default function Header() {
             <header className="items-center shadow-md">
                 <nav className="mx-auto flex items-center justify-evenly p-3 lg:px-8" aria-label="Global">
                     <div className="flex flex-1">
-                        <a href="/#" className="flex flex-row-reverse gap-1 items-center">
+                        <a href="/#" className="flex flex-row-reverse gap-1 items-center no-underline text-amber-500 font-semibold">
                             <span className="">Voyage</span>
                             <img className="h-8 w-auto" src={logo} alt="Voyage"/>
                         </a>
