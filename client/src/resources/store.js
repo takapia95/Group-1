@@ -28,7 +28,8 @@ const handle404 = debounce(() => {
 }, 100);
 
 const apiClient = axios.create({
-    baseURL: 'http://localhost:3001'
+    //baseURL: 'http://localhost:3001'
+    baseURL: process.env.REACT_APP_SERVER_BASE_URL
 });
 
 // Response interceptor to handle expired tokens with debounced redirection
@@ -54,7 +55,8 @@ apiClient.interceptors.response.use(response => response, error => {
     if (error.response && error.response.status === 404) {
         console.error('404 Error:', error.response.data);
 
-        handle404();
+        console.log(`BASE URL: ${process.env.REACT_APP_SERVER_BASE_URL}`)
+        //handle404();
 
         return Promise.reject(error);
     }
@@ -76,7 +78,7 @@ export const useStore = create((set) => ({
     // Login
     login: async (username, password) => {
         try {
-            const response = await apiClient.post('http://localhost:3001/login', { username, password });
+            const response = await apiClient.post(`${process.env.REACT_APP_SERVER_BASE_URL}/login`, { username, password });
             if (response.data.message === 'Login successful') {
                 set({
                     authToken: response.data.token,
@@ -109,7 +111,7 @@ export const useStore = create((set) => ({
     // Register
     register: async (username, password) => {
         try {
-            const response = await apiClient.post('http://localhost:3001/register', { username, password });
+            const response = await apiClient.post(`${process.env.REACT_APP_SERVER_BASE_URL}/register`, { username, password });
             console.log('Registration successful:', response.data);
             alert('Registration successful');
 
@@ -134,7 +136,7 @@ export const useStore = create((set) => ({
         }
 
         try {
-            let url = `http://localhost:3001/search?searchQuery=${encodeURIComponent(searchQuery)}`;
+            let url = `${process.env.REACT_APP_SERVER_BASE_URL}/search?searchQuery=${encodeURIComponent(searchQuery)}`;
             if (category) {
                 url += `&category=${encodeURIComponent(category)}`;
             }
@@ -167,7 +169,7 @@ export const useStore = create((set) => ({
     getJournalEntries: async () => {
         const token = useStore.getState().authToken;
         try {
-            const response = await apiClient.get('http://localhost:3001/journals', {
+            const response = await apiClient.get(`${process.env.REACT_APP_SERVER_BASE_URL}/journals`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -185,7 +187,7 @@ export const useStore = create((set) => ({
     addJournalEntry: async (locationId, locationName, title, text, isPublic, coverPhoto) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await apiClient.post('http://localhost:3001/journals', { locationId, locationName, title, text, isPublic, coverPhoto }, {
+            const response = await apiClient.post(`${process.env.REACT_APP_SERVER_BASE_URL}/journals`, { locationId, locationName, title, text, isPublic, coverPhoto }, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -203,7 +205,7 @@ export const useStore = create((set) => ({
     deleteJournalEntry: async(id) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await apiClient.delete(`http://localhost:3001/journals/${id}`, {
+            const response = await apiClient.delete(`${process.env.REACT_APP_SERVER_BASE_URL}/journals/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -221,7 +223,7 @@ export const useStore = create((set) => ({
     getJournalEntryById: async (id) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await apiClient.get(`http://localhost:3001/journals/${id}`, {
+            const response = await apiClient.get(`${process.env.REACT_APP_SERVER_BASE_URL}/journals/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -237,7 +239,7 @@ export const useStore = create((set) => ({
     editJournalEntry: async (id, title, text, isPublic, coverPhoto) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await apiClient.put(`http://localhost:3001/journals/${id}`, { title, text, isPublic, coverPhoto }, {
+            const response = await apiClient.put(`${process.env.REACT_APP_SERVER_BASE_URL}/journals/${id}`, { title, text, isPublic, coverPhoto }, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -255,7 +257,7 @@ export const useStore = create((set) => ({
     getJournalEntriesByLocation: async (locationId) => {
         const authToken = useStore.getState().authToken;
         try {
-            const response = await apiClient.get(`http://localhost:3001/journals/location/${locationId}`, {
+            const response = await apiClient.get(`${process.env.REACT_APP_SERVER_BASE_URL}/journals/location/${locationId}`, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
@@ -272,7 +274,7 @@ export const useStore = create((set) => ({
         const authToken = useStore.getState().authToken;
 
         try {
-            const response = await apiClient.get(`http://localhost:3001/locations/${locationId}/photos`, {
+            const response = await apiClient.get(`${process.env.REACT_APP_SERVER_BASE_URL}/locations/${locationId}/photos`, {
                 headers: {
                     'Authorization': `Bearer ${authToken}`
                 }
