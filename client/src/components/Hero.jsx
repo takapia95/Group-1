@@ -1,12 +1,16 @@
 import {useStore} from "../resources/store"
 import Search from "./Search";
-import Modal from "./Modal";
 import {useState} from "react";
+import Modal from "./Modal";
+
 
 const Hero = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
     // zustand store
     const loggedIn = useStore((state) => state.loggedIn);
+
+    // local state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     // Function to toggle modal visibility
     const toggleModal = () => setIsModalOpen(!isModalOpen);
 
@@ -24,7 +28,7 @@ const Hero = () => {
                     </p>
                     <div className="mt-10 flex items-center gap-x-6">
                         <button
-                            onClick={() => toggleModal()}
+                            onClick={toggleModal}
                             className="rounded-md bg-amber-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
                         >
                             Start your journey
@@ -48,7 +52,7 @@ const Hero = () => {
                     </div>
                 </div>
             </div>
-        <Modal isOpen={isModalOpen} onClose={toggleModal}/>
+            <Modal isOpen={isModalOpen} onClose={toggleModal}/>
         </div>
     ) : (
         <Search />
