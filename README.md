@@ -198,7 +198,21 @@ To run this project, you will need to add the following environment variables to
 
 ###### Response:
 ```json
-[]
+[
+   {
+      "coverPhoto": "travelPhoto4",
+      "createdAt": "2024-04-24T13:47:45.991Z",
+      "date": "4/24/202",
+      "isPublic": true,
+      "lastUpdated": "2024-04-24T14:16:04.351Z",
+      "location": "Paris",
+      "locationId": "23475286",
+      "text": "This is a test journal entry",
+      "title": "Test Journal Entry",
+      "userId": "6084b3b3b3b3b3b3b3b3b3b3",
+      "_id": "6084b3b3b3b3b3b3b3b3b3b3"
+   }
+]
 ```
 
 ---
@@ -256,6 +270,42 @@ To run this project, you will need to add the following environment variables to
 
 ---
 
+### Delete a journal entry
+
+```http
+  DELETE /journals/:id
+```
+
+| Parameter  | Type     | Description            |
+|:-----------| :------- |:-----------------------|
+| `id` | `string` | **Required**. Journal ID |
+
+---
+
+### Get journal entries by location
+    
+ ```http
+ GET /journals/location/:location
+ ```
+
+| Parameter  | Type     | Description            |
+|:-----------| :------- |:-----------------------|
+| `location` | `string` | **Required**. Location name |
+
+---
+
+### Get photos for a location from TripAdvisor API
+    
+ ```http
+ GET /locations/:id/photos
+ ```
+
+| Parameter  | Type     | Description            |
+|:-----------| :------- |:-----------------------|
+| `id` | `string` | **Required**. Location ID |
+
+---
+
 ## Tech Stack
 
 **Client:** React, Zustand, TailwindCSS
@@ -273,10 +323,10 @@ To run this project, you will need to add the following environment variables to
 - Better understanding of local storage and session storage
 - Dynamic component rendering based on application state
 
+## 🌐Demo / Hosting
 
-## 🌐Demo
-
-Coming soon
+- **Frontend**: https://group-1-production.up.railway.app/
+- **Backend**: https://group-1-za2p.onrender.com/
 
 ## 👤 Group Members
 
