@@ -1,7 +1,7 @@
 const cors = require('cors'); // Cross-Origin Resource Sharing
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3002;
 const {authenticateToken, validateObjectId} = require('./middleware/authMiddleware');
 const { connectDB } = require('./config/db');
 const { login, register } = require('./controllers/authController');
@@ -83,3 +83,5 @@ app.get('/locations/:id/photos', authenticateToken, getLocationPhoto);
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+module.exports = app;

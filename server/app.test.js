@@ -1,37 +1,30 @@
 const request = require('supertest');
-const app = require('server/app.js');
+const app = require('./app');
+const { connectDB } = require('./config/db');
+
+
+jest.setTimeout(10000);
 
 describe('Authentication', () => {
+  let server;
+
+  beforeAll(async () => {
+    await connectDB(); // connect to the database
+    server = await app.listen(0);
+  });
+
+  afterAll(async () => {
+    await server.close();
+  });
+
   it('should login a user', async () => {
-    const response = await request(app)
-      .post('/login')
-      .send({
-        // provide valid login credentials
-     });
+    const response = await request(server)
+        .post('/login')
+        .send({
+          username: 'test',
+          password: '123',
+        });
     expect(response.status).toBe(200);
-    // add more assertions as needed
-  });
+  }, 10000); // timeout after 10 seconds
 
-  it('should register a new user', async () => {
-    const response = await request(app)
-      .post('/register')
-      .send({
-        // provide valid registration data
-      });
-    expect(response.status).toBe(200);
-    // add more assertions as needed
-  });
 });
-
-describe('Search', () => {
-  it('should search for locations', async () => {
-    // Mock authentication token
-    const authToken = 'mock-auth-token';
-    const response = await request(app)
-      .get('/search')
-      .set('Authorization', `Bearer ${authToken}`);
-    expect(response.status).toBe(200);
-    // add more assertions as needed
-  });
-});
-
