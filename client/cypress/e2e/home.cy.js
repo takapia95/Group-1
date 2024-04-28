@@ -41,4 +41,13 @@ describe('Home', () => {
         cy.get('button').contains('Login').click()
         cy.get('h4').should('contain', 'Login')
     })
+
+    it('after login, should show search bar', () => {
+        cy.visit('http://localhost:3000')
+        cy.get('button').contains('Login').click()
+        cy.get('#username').type('test')
+        cy.get('#password').type('123')
+        cy.get('#login').click()
+        cy.get('input').should('have.length', 1)
+    })
 })

@@ -55,6 +55,7 @@ const Login = () => {
                     />
                 </div>
                 <button
+                    id="login"
                     onClick={handleLogin}
                     type="submit"
                     className="w-full px-4 py-2 text-white bg-amber-500 rounded-md shadow-md hover:bg-amber-300 focus:outline-none focus:ring-2 focus:ring-amber-500"
