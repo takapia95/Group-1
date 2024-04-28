@@ -44,7 +44,14 @@ describe('Journal Controller', () => {
             // Mock request and response objects
             const req = {
                 user: { _id: 'user_id' },
-                body: { title: 'Test Title', text: 'Test Text' },
+                body: {
+                    title: 'Test Title',
+                    text: 'Test Text',
+                    isPublic: true,
+                    coverPhoto: 'travelPhoto1.jpg',
+                    locationId: 'location_id',
+                    locationName: 'Location Name',
+                },
             };
             const res = {
                 status: jest.fn().mockReturnThis(),
@@ -64,6 +71,10 @@ describe('Journal Controller', () => {
                 userId: 'user_id',
                 title: 'Test Title',
                 text: 'Test Text',
+                isPublic: true,
+                coverPhoto: 'travelPhoto1.jpg',
+                locationId: 'location_id',
+                location: 'Location Name',
             }));
             expect(res.status).toHaveBeenCalledWith(201);
             expect(res.json).toHaveBeenCalledWith(insertOneResult); // Verify the response data
@@ -92,6 +103,5 @@ describe('Journal Controller', () => {
             expect(res.json).toHaveBeenCalled(); // You can add more specific assertions if needed
         });
     });
-    
 
 });
