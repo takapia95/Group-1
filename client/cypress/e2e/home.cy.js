@@ -50,4 +50,14 @@ describe('Home', () => {
         cy.get('#login').click()
         cy.get('input').should('have.length', 1)
     })
+
+    it('view journals button', () => {
+        cy.visit('http://localhost:3000')
+        cy.get('button').contains('Login').click()
+        cy.get('#username').type('test')
+        cy.get('#password').type('123')
+        cy.get('#login').click()
+        cy.get('a').contains('View Journals').click()
+        cy.url().should('include', '/profile')
+    });
 })
