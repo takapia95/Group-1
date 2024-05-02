@@ -2,10 +2,8 @@ import React from 'react';
 import Registration from '../components/Registration';
 import { render, screen } from '@testing-library/react';
 
-// mock the axios
 jest.mock('axios');
 
-// mock the Zustand store
 jest.mock('../resources/store', () => ({
     useStore: jest.fn(),
 }));
