@@ -2,16 +2,16 @@ import {useStore} from "../resources/store";
 import {useNavigate} from "react-router-dom";
 
 const Search = () => {
-    const navigate = useNavigate(); // useNavigation hook - to navigate to different pages
-    const username = useStore((state) => state.username); // get the user from the store
+    const navigate = useNavigate(); 
+    const username = useStore((state) => state.username); 
 
     const handleSearch = (searchQuery) => {
-        // added trim because it was possible to search with just spaces, which caused errors...
+        
         if (searchQuery.trim() === '') {
             alert('Please enter a search query');
             return;
         }
-        // navigate to the search results page with the search query
+       
         navigate('/results?searchQuery=' + encodeURIComponent(searchQuery));
     }
     
