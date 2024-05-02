@@ -19,7 +19,6 @@ const login = async (req, res) => {
 
     const token = jwt.sign({ _id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
 
-    // check if user has journals
     const journals = await db.collection('journals').find({ userId: user._id.toString() }).toArray();
 
 
@@ -36,23 +35,19 @@ const register = async (req, res) => {
     const db = getDb();
     const userExists = await db.collection('users').findOne({ username });
 
-    // check if user exists
     if (userExists) {
         return res.status(400).json({ message: 'User already exists. Please pick a different username.' });
     }
 
-    // hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // create user
     const newUser = {
         username,
         password: hashedPassword,
-        createdAt: new Date() // timestamp
+        createdAt: new Date() 
     };
 
-    // save user to db
     try {
         const result = await db.collection('users').insertOne(newUser);
         res.status(201).json(result);
