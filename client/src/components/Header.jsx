@@ -5,23 +5,18 @@ import Modal from "./Modal";
 import logo from "../images/logo.png";
 
 export default function Header() {
-    // local state
+    
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // zustand store
     const logout = useStore((state) => state.logout);
     const loggedIn = useStore((state) => state.loggedIn);
 
-    // useLocation hook - to get the current location
     const location = useLocation();
 
-    // Function to toggle modal visibility
     const toggleModal = () => setIsModalOpen(!isModalOpen);
 
-    // if the current location is the 'profile' page...
     const isProfilePage = location.pathname === "/profile";
 
-    // variable to show what buttons to display in the header depending on state
     let buttons;
 
     useEffect(() => {
@@ -31,8 +26,6 @@ export default function Header() {
     }, [loggedIn]);
 
 
-    // instead of having a nested ternary, i used if else statements, so...
-    // if the user is logged in and the current location is the 'profile' page then..
     if (loggedIn) {
         if (isProfilePage) {
             buttons = (
