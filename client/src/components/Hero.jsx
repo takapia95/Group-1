@@ -6,13 +6,11 @@ import addJournalPhoto from '../images/add-journal.png';
 
 
 const Hero = () => {
-    // zustand store
+
     const loggedIn = useStore((state) => state.loggedIn);
 
-    // local state
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Function to toggle modal visibility
     const toggleModal = () => setIsModalOpen(!isModalOpen);
 
     return !loggedIn ? (
