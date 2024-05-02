@@ -6,7 +6,7 @@ describe('Showcase Component', () => {
     it('renders correctly', () => {
         const { getByText, getAllByAltText } = render(<Showcase />);
 
-        expect(getByText("Add photos and maps")).toBeInTheDocument();
+        expect(getByText("Photos and locations")).toBeInTheDocument();
         expect(getByText("Share your Voyage!")).toBeInTheDocument();
 
         const images = getAllByAltText("Product screenshot");
