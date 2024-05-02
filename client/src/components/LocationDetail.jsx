@@ -68,7 +68,7 @@ const LocationDetail = () => {
             <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">Wow! You've been to...</h2>
             <p className="mt-6 text-xl leading-8 text-gray-700 font-bold">{location?.name}</p>
             <p className="mt-6 text-lg leading-8 text-gray-700 font-semibold">{location?.address_obj.address_string}</p>
-            {/* TODO: maybe add a better placeholder image? */}
+
             <img src={locationPhoto || 'https://via.placeholder.com/500'} className="rounded" alt={location?.name} />
             <p>Want to write about your experience?</p>
             <button onClick={() => navigate(`/add-entry/${location?.name}/${locationId}`)}
@@ -90,7 +90,6 @@ const LocationDetail = () => {
                 </div>
             </div>
 
-            {/*WOW, i had NO IDEA ABOUT THAT -1!!! HOW NICE!!! wow.*/}
             <button onClick={() => navigate(-1)}
                     className="text-sm font-semibold leading-6 text-amber-500 ease-linear transition hover:-translate-x-2">
                 <span aria-hidden="true">&larr;</span>
