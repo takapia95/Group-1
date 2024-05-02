@@ -5,7 +5,6 @@ const dbName = process.env.MONGODB_DB;
 
 let dbInstance;
 
-// Create a MongoClient instance
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -18,28 +17,13 @@ async function connectDB() {
     try {
         await client.connect();
         console.log("Successfully connected to MongoDB!");
-        dbInstance = client.db(dbName); // Assign the db instance to a variable
+        dbInstance = client.db(dbName); 
     } catch (error) {
         console.error("Could not connect to DB:", error);
         process.exit(1);
     }
 }
 
-// return the db instance so we can use it in other files
 const getDb = () => dbInstance;
-
-// this is the example from the docs - still here for reference
-// async function connectDB() {
-//     try {
-//         // Connect the client to the server	(optional starting in v4.7)
-//         await client.connect();
-//         // Send a ping to confirm a successful connection
-//         await client.db(dbName).command({ ping: 1 });
-//         console.log("Pinged your deployment. You successfully connected to MongoDB!");
-//     } finally {
-//         // Ensures that the client will close when you finish/error
-//         await client.close();
-//     }
-// }
 
 module.exports = { connectDB, getDb };
