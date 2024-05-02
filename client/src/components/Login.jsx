@@ -7,7 +7,7 @@ const Login = () => {
 
     const switchToRegister = () => {
         setLoginError('');
-        setModalContent('register'); // Switch to Registration component
+        setModalContent('register'); 
     };
 
     const handleLogin = async (e) => {
