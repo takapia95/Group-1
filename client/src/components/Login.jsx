@@ -5,7 +5,6 @@ const Login = () => {
     const [loginError, setLoginError] = useState('');
     const setModalContent = useStore((state) => state.setModalContent);
 
-    // switch to register
     const switchToRegister = () => {
         setLoginError('');
         setModalContent('register'); // Switch to Registration component
@@ -16,7 +15,6 @@ const Login = () => {
         const username = document.getElementById("username").value;
         const password = document.getElementById("password").value;
 
-        // if the username or password is empty don't submit the form - this is to prevent so many requests to the server
         if (username === '' || password === '') {
             setLoginError('Please fill in all fields');
             return;
