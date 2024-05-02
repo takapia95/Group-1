@@ -5,10 +5,9 @@ const Register = () => {
     const [registerError, setRegisterError] = useState('');
     const setModalContent = useStore((state) => state.setModalContent);
 
-    // switch to login
     const switchToLogin = () => {
         setRegisterError('');
-        setModalContent('login'); // Switch to Login component
+        setModalContent('login'); 
     };
 
     const handleRegister = async (e) => {
@@ -79,7 +78,6 @@ const Register = () => {
                 >
                     Register
                 </button>
-                {/*  if there's an error  */}
                 {registerError && (
                     <p className="text-red-500 text-sm mt-2">{registerError}</p>
                 )}
