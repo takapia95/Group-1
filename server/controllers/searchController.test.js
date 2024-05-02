@@ -5,7 +5,7 @@ jest.mock("axios");
 
 describe("search function", () => {
   test("should return data from TripAdvisor API", async () => {
-    const mockData = { /* Mock data here */ };
+    const mockData = { };
     const mockResponse = { data: mockData };
 
     axios.get.mockResolvedValue(mockResponse);
@@ -46,7 +46,7 @@ describe("search function", () => {
 
     await search(req, res);
 
-    expect(axios.get).toHaveBeenCalledTimes(2); // Change to 2
+    expect(axios.get).toHaveBeenCalledTimes(2);
     expect(axios.get).toHaveBeenCalledWith(expect.stringContaining("searchQuery=London"));
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ message: errorMessage, error: mockError.response });
