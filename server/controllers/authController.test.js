@@ -1,4 +1,3 @@
-// authController.test.js
 const { login, register } = require('./authController');
 
 jest.mock('jsonwebtoken', () => ({
@@ -10,8 +9,6 @@ jest.mock('bcrypt', () => ({
     genSalt: jest.fn(),
     hash: jest.fn()
 }));
-
-// Mock MongoClient instance
 
 const mockDbInstance = {
     collection: jest.fn(() => ({
@@ -46,15 +43,12 @@ describe('Auth Controller', () => {
                 json: jest.fn()
             };
 
-            // Register new user
             mockDbInstance.collection().findOne.mockResolvedValueOnce({ username: 'newuser' });
 
             await register(req, res);
 
             expect(res.status).toHaveBeenCalledWith(201);
         });
-
-        // Add more tests for different scenarios as needed
     });
 
     describe('login', () => {
@@ -83,7 +77,5 @@ describe('Auth Controller', () => {
             expect(res.status).toHaveBeenCalledWith(400);
             expect(res.json).toHaveBeenCalledWith({ message: 'Invalid username or password' });
         });
-
-        // Add more tests for different scenarios as needed
     });
 });
