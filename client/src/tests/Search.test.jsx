@@ -2,13 +2,11 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import Search from '../components/Search';
 
-// Mocking the react-router-dom's useNavigate hook
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => jest.fn(),
 }));
 
-// Mocking the useStore hook
 jest.mock('../resources/store', () => ({
   useStore: jest.fn(),
 }));
