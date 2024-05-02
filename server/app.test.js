@@ -2,14 +2,13 @@ const request = require('supertest');
 const app = require('./app');
 const { connectDB } = require('./config/db');
 
-
 jest.setTimeout(10000);
 
 describe('Authentication', () => {
   let server;
 
   beforeAll(async () => {
-    await connectDB(); // connect to the database
+    await connectDB(); 
     server = await app.listen(0);
   });
 
@@ -25,6 +24,6 @@ describe('Authentication', () => {
           password: '123',
         });
     expect(response.status).toBe(200);
-  }, 10000); // timeout after 10 seconds
+  }, 10000); 
 
 });
