@@ -1,34 +1,30 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom'; // Import MemoryRouter
+import { MemoryRouter } from 'react-router-dom'; 
 import SearchResults from '../components/SearchResults';
 
-// Mock the useNavigate hook from react-router-dom
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => jest.fn(),
 }));
 
-// Import the custom useSearchParams hook
 import { useSearchParams } from '../customHooks';
 
-// Mock the useSearchParams hook with the custom implementation
 jest.mock('../customHooks', () => ({
   useSearchParams: jest.fn(),
 }));
 
-// Mock the useStore hook
 jest.mock('../resources/store', () => ({
   useStore: {
     getState: () => ({
-      search: jest.fn().mockResolvedValue([]), // Mock the search function to return an empty array
+      search: jest.fn().mockResolvedValue([]), 
     }),
   },
 }));
 
 describe('SearchResults', () => {
   beforeEach(() => {
-    // Reset the mock implementation of useSearchParams before each test
     useSearchParams.mockReturnValue({
       get: jest.fn(),
       set: jest.fn(),
