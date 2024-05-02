@@ -33,8 +33,8 @@ describe('UserProfile component', () => {
     useStore.mockReturnValueOnce('');
     useStore.mockReturnValueOnce(false);
 
-    const navigate = jest.fn(); // Create a jest mock function
-    require('react-router-dom').useNavigate.mockReturnValue(navigate); // Mock useNavigate to return the jest mock function
+    const navigate = jest.fn();
+    require('react-router-dom').useNavigate.mockReturnValue(navigate); 
 
     render(
       <BrowserRouter>
@@ -42,9 +42,8 @@ describe('UserProfile component', () => {
       </BrowserRouter>
     );
 
-    // Wait for redirection to '/'
     await waitFor(() => {
-        expect(navigate).toHaveBeenCalledWith('/'); // Assert that navigate was called with the correct path
+        expect(navigate).toHaveBeenCalledWith('/'); 
     });
   });
 
@@ -59,7 +58,6 @@ describe('UserProfile component', () => {
       </BrowserRouter>
     );
 
-    // Wait for message to be present
     await waitFor(() => {
       expect(screen.getByText('No entries yet!')).toBeInTheDocument();
     });
@@ -79,10 +77,8 @@ describe('UserProfile component', () => {
       </BrowserRouter>
     );
 
-    // Simulate a click on the "Start Journaling" button
     fireEvent.click(screen.getByText('Start Journaling'));
 
-    // Assert that the correct navigation occurred
     expect(navigate).toHaveBeenCalledWith('/#');
   });
 });
