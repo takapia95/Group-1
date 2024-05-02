@@ -44,9 +44,9 @@ apiClient.interceptors.response.use(response => response, error => {
     }
 
     if (error.response && error.response.status === 404) {
-        console.error('404 Error:', error.response.data);
 
-        console.log(`BASE URL: ${process.env.REACT_APP_SERVER_BASE_URL}`)
+        handle404();
+        console.error('404 Error:', error.response.data);
 
         return Promise.reject(error);
     }
