@@ -18,15 +18,15 @@ const LocationDetail = () => {
             setLoading(true);
             try {
                 const storedLocationInfo = JSON.parse(sessionStorage.getItem('currentLocationInfo'));
-                // If location info is in session storage, update the store with it
+                
                 if (storedLocationInfo) {
                     useStore.setState({ currentLocationInfo: storedLocationInfo });
-                    // get location photo
+
                     const photoData = await getLocationPhoto(storedLocationInfo.location_id);
                     setLocationPhoto(photoData.data[0].images.large.url);
                 } else {
                     console.error('No location info found');
-                    navigate('/404'); // Redirect to a 404 page if no location info is found
+                    navigate('/404'); 
                 }
             } catch (error) {
                 console.error('Failed to fetch location info', error);
@@ -36,9 +36,8 @@ const LocationDetail = () => {
             }
         };
 
-        // fetch random entry from location
         const fetchRandomEntry = async () => {
-            // Fetch random entry from location
+
             console.log('Fetching random entry from location:', locationId);
             try {
                 const response = await getJournalEntriesByLocation(locationId);
@@ -56,9 +55,9 @@ const LocationDetail = () => {
     useEffect(() => {
         if (!loading && locationId !== location?.location_id) {
             console.error('Location ID mismatch!!! Redirecting...');
-            navigate('/404'); // Redirect to a 404 page if IDs don't match
+            navigate('/404'); 
         }
-    }, [location, locationId, loading, navigate]); // Re-check when loading status or location changes
+    }, [location, locationId, loading, navigate]); 
 
     if (loading) {
         return <Loading />;
