@@ -10,7 +10,7 @@ const search = async(req, res) => {
 
     try {
         const response = await axios.get(url);
-        res.json(response.data); // send the data back to the client - the response from the TripAdvisor API
+        res.json(response.data); 
     } catch (error) {
         res.status(500).json({ message: "Error fetching data", error: error.response });
     }
