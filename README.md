@@ -78,7 +78,7 @@ To run this project, you will need to add the following environment variables to
 ### Login for existing users
 
 ```http
-  GET /login
+  POST /login
 ```
 
 | Parameter  | Type     | Description            |
@@ -119,7 +119,7 @@ To run this project, you will need to add the following environment variables to
 ### Search for a location using TripAdvisor API
 
 ```http
-  GET /search
+  POST /search
 ```
 
 | Parameter  | Type     | Description            |
