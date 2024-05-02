@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
-const middleware = require('./authMiddleware'); // Import your middleware functions
+const middleware = require('./authMiddleware'); 
 
-// Mocking environment variable
 process.env.TOKEN_SECRET = 'testsecret';
 
 describe('authenticateToken middleware', () => {
